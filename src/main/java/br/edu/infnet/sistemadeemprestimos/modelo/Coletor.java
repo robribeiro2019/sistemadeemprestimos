@@ -15,7 +15,7 @@ import org.springframework.lang.NonNull;
 public class Coletor {
 	
 	@Id
-	@GeneratedValue (strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="CollectorID")
 	private Integer numeroDoColetor;
 	

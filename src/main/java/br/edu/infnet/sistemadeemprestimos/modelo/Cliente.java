@@ -9,14 +9,12 @@ import javax.persistence.Table;
 
 import org.springframework.lang.NonNull;
 
-
-
 @Entity
 @Table(name="Customer")
 public class Cliente {
 
 	@Id
-	@GeneratedValue (strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="CustomerNumber")
 	private Integer numeroDoCliente;
 	

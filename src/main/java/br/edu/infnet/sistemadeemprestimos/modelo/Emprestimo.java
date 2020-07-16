@@ -14,44 +14,45 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.lang.NonNull;
 
 
 @Entity
 @Table(name="LoanContract")
-public class EmprestimoConcedido {
+public class Emprestimo {
 	
 	@Id
-	@GeneratedValue (strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="ContractID")
 	private Integer numeroDoContrato;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="DateContractStarts")
-	private Date DataInicioContrato;	
+	private Date dataInicioContrato;	
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="DateContractEnds")
-	private Date DataFimContrato;	
+	private Date dataFimContrato;	
 	
 	@NonNull
 	@Column(name="InterestRate")
-	private BigDecimal TaxaDeJuros;
+	private BigDecimal taxaDeJuros;
 	
 	@NonNull
 	@Column(name="LoanAmount")
-	private BigDecimal MontanteDoEmprestimo;	
+	private BigDecimal montanteDoEmprestimo;	
 	
 	@NonNull
 	@Column(name="LoanPaymentAmountDue")
-	private BigDecimal MontanteDoEmprestimoDevido;
+	private Double montanteDoEmprestimoDevido;
 	
 	@Column(name="LoanPaymentFrequency")
-	private Integer QuantidadeDeParcelas;	
+	private Integer quantidadeDeParcelas;	
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="LoanPaymentDueDate")
-	private Date DataProximoVencimento;		
+	private Date dataProximoVencimento;		
 	
     @ManyToOne
 	@JoinColumn(name="CustomerNumber")
@@ -60,8 +61,10 @@ public class EmprestimoConcedido {
     @ManyToOne
 	@JoinColumn(name="CollectorID")
 	private Coletor coletor;
-
     
+    @Transient
+    private String status;
+
 	public Integer getNumeroDoContrato() {
 		return numeroDoContrato;
 	}
@@ -71,59 +74,59 @@ public class EmprestimoConcedido {
 	}
 
 	public Date getDataInicioContrato() {
-		return DataInicioContrato;
+		return dataInicioContrato;
 	}
 
 	public void setDataInicioContrato(Date dataInicioContrato) {
-		DataInicioContrato = dataInicioContrato;
+		this.dataInicioContrato = dataInicioContrato;
 	}
 
 	public Date getDataFimContrato() {
-		return DataFimContrato;
+		return dataFimContrato;
 	}
 
 	public void setDataFimContrato(Date dataFimContrato) {
-		DataFimContrato = dataFimContrato;
+		this.dataFimContrato = dataFimContrato;
 	}
 
 	public BigDecimal getTaxaDeJuros() {
-		return TaxaDeJuros;
+		return taxaDeJuros;
 	}
 
 	public void setTaxaDeJuros(BigDecimal taxaDeJuros) {
-		TaxaDeJuros = taxaDeJuros;
+		this.taxaDeJuros = taxaDeJuros;
 	}
 
 	public BigDecimal getMontanteDoEmprestimo() {
-		return MontanteDoEmprestimo;
+		return montanteDoEmprestimo;
 	}
 
 	public void setMontanteDoEmprestimo(BigDecimal montanteDoEmprestimo) {
-		MontanteDoEmprestimo = montanteDoEmprestimo;
+		this.montanteDoEmprestimo = montanteDoEmprestimo;
 	}
 
-	public BigDecimal getMontanteDoEmprestimoDevido() {
-		return MontanteDoEmprestimoDevido;
+	public Double getMontanteDoEmprestimoDevido() {
+		return montanteDoEmprestimoDevido;
 	}
 
-	public void setMontanteDoEmprestimoDevido(BigDecimal montanteDoEmprestimoDevido) {
-		MontanteDoEmprestimoDevido = montanteDoEmprestimoDevido;
+	public void setMontanteDoEmprestimoDevido(Double montanteDoEmprestimoDevido) {
+		this.montanteDoEmprestimoDevido = montanteDoEmprestimoDevido;
 	}
 
 	public Integer getQuantidadeDeParcelas() {
-		return QuantidadeDeParcelas;
+		return quantidadeDeParcelas;
 	}
 
 	public void setQuantidadeDeParcelas(Integer quantidadeDeParcelas) {
-		QuantidadeDeParcelas = quantidadeDeParcelas;
+		this.quantidadeDeParcelas = quantidadeDeParcelas;
 	}
 
 	public Date getDataProximoVencimento() {
-		return DataProximoVencimento;
+		return dataProximoVencimento;
 	}
 
 	public void setDataProximoVencimento(Date dataProximoVencimento) {
-		DataProximoVencimento = dataProximoVencimento;
+		this.dataProximoVencimento = dataProximoVencimento;
 	}
 
 	public Cliente getCliente() {
@@ -138,8 +141,27 @@ public class EmprestimoConcedido {
 		return coletor;
 	}
 
+
 	public void setColetor(Coletor coletor) {
 		this.coletor = coletor;
-	}	    
+	}
+
+	public String getStatus() {
+		
+		Date hoje = new Date();
+		
+		if(dataProximoVencimento.compareTo(hoje) > 0) {	
+			return "Regular";
+		}else if (dataProximoVencimento.compareTo(hoje) < 0 && montanteDoEmprestimoDevido > 0) {
+			return "Vencido";
+		}else if (montanteDoEmprestimoDevido == 0 ){
+			return "Quitado";
+		}
+		
+		return "Sem Status";
+		
+	}	  
+	
+	
 	
 }

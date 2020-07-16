@@ -2,7 +2,9 @@ package br.edu.infnet.sistemadeemprestimos.modelo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,7 +24,7 @@ import org.springframework.lang.NonNull;
 public class Pagamento {
 	
 	@Id
-	@GeneratedValue (strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="PaymentID")
 	private Integer numeroDoPagamento;
 	
@@ -43,7 +46,11 @@ public class Pagamento {
 	
     @ManyToOne
 	@JoinColumn(name="ContractID")
-	private EmprestimoConcedido emprestimoConcedido;
+	private Emprestimo emprestimoConcedido;
+    
+    @OneToMany
+    @JoinColumn(name="payTypeCode")
+    private List<TipoPagamento> tipoPagamento;
 
 	public Integer getNumeroDoPagamento() {
 		return numeroDoPagamento;
@@ -85,14 +92,22 @@ public class Pagamento {
 		this.observacoes = observacoes;
 	}
 
-	public EmprestimoConcedido getEmprestimoConcedido() {
+	public Emprestimo getEmprestimoConcedido() {
 		return emprestimoConcedido;
 	}
 
-	public void setEmprestimoConcedido(EmprestimoConcedido emprestimoConcedido) {
+	public void setEmprestimoConcedido(Emprestimo emprestimoConcedido) {
 		this.emprestimoConcedido = emprestimoConcedido;
-	}	
+	}
 
-    
-    
+	public List<TipoPagamento> getTipoPagamento() {
+		return tipoPagamento;
+	}
+
+	public void setTipoPagamento(List<TipoPagamento> tipoPagamento) {
+		this.tipoPagamento = tipoPagamento;
+	}
+
+	
+
 }
