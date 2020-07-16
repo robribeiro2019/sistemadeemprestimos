@@ -27,5 +27,14 @@ public class EmprestimoService {
 	public List<Emprestimo> listarTodosEmprestimos() {
 		return emprestimoRepositorio.findAll();
 	}
+	
+	public Emprestimo getEmprestimo(String id) {
+		return emprestimoRepositorio.getOne(Integer.valueOf(id));
+	}
+	
+	@Transactional
+	public void delete(String id) {
+		emprestimoRepositorio.delete(getEmprestimo(id));
+	}	
 
 }

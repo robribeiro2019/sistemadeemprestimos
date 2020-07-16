@@ -13,9 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Transient;
-import org.springframework.lang.NonNull;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 
 @Entity
@@ -27,29 +31,42 @@ public class Emprestimo {
 	@Column(name="ContractID")
 	private Integer numeroDoContrato;
 	
+	
+	@NotNull(message = "Date de início de contrato é obrigatória")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
 	@Column(name="DateContractStarts")
 	private Date dataInicioContrato;	
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
 	@Column(name="DateContractEnds")
 	private Date dataFimContrato;	
 	
-	@NonNull
+	
+	@NotNull(message = "Valor da taxa de juros é obrigatório")
+	@DecimalMin(value = "0.01", message = "Valor não pode ser menor que 0,01")
+	@DecimalMax(value = "9999999.99", message = "Valor não pode ser maior que 9.999.999,99")
+	@NumberFormat(pattern = "#,##0.00") 
 	@Column(name="InterestRate")
 	private BigDecimal taxaDeJuros;
 	
-	@NonNull
+	@NotNull(message = "Valor do emprestimo é obrigatório")
+	@DecimalMin(value = "0.01", message = "Valor não pode ser menor que 0,01")
+	@DecimalMax(value = "9999999.99", message = "Valor não pode ser maior que 9.999.999,99")
+	@NumberFormat(pattern = "#,##0.00")  
 	@Column(name="LoanAmount")
 	private BigDecimal montanteDoEmprestimo;	
 	
-	@NonNull
+	@NumberFormat(pattern = "#,##0.00") 
 	@Column(name="LoanPaymentAmountDue")
 	private Double montanteDoEmprestimoDevido;
 	
+	@NotNull(message = "Quantidade de Parcelas é obrigatório")
 	@Column(name="LoanPaymentFrequency")
 	private Integer quantidadeDeParcelas;	
 	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
 	@Column(name="LoanPaymentDueDate")
 	private Date dataProximoVencimento;		

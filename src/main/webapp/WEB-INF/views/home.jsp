@@ -9,35 +9,30 @@
 <meta charset="ISO-8859-1">
 <title>Sistema de empréstimos</title>
 
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"	crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 </head>
 <body>
 
-	<div class="container">
+	<div class="table-responsive-xl">
 
-		<div class="jumbotron">
-			<h1>
-				<i class="fa fa-handshake-o" aria-hidden="true"></i> Sistema de
-				empréstimos financeiros
+			<h1 align="center">
+				<i class="fa fa-handshake-o"> Sistema de empréstimos </i> 
 			</h1>
-			<h3>Com spring boot</h3>
-		</div>
 
-		<div class="d-flex justify-content-between">
-			<h4>Listagem de empréstimos</h4>
-			<h3>
-				<a class="btn btn-primary" href='<c:url value="/criarEmprestimo" />'>
-					Criar novo empréstimo </a>
-			</h3>
+		<div class="table-info">
+			<nav aria-label="breadcrumb">
+			  <ol class="breadcrumb">
+			    <li class="breadcrumb-item"><a href='<c:url value="/" />'>Lista de empréstimos</a></li>
+			    <li class="breadcrumb-item"><a href='<c:url value="/novo" />'>Criar novo empréstimo</a></li>
+			  </ol>
+			</nav>
 		</div>
-		<table class="table">
-			<thead>
+		
+		<table class="table table-sm">
+			<thead class="thead-dark">
 				<tr>
 					<th>Número do contrato</th>
 					<th>Nome do cliente</th>
@@ -47,7 +42,7 @@
 					<th>Saldo montante devido</th>
 					<th>Próximo vencimento</th>
 					<th>Status</th>
-					<th>Ação</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -61,10 +56,17 @@
 						<td>${emprestimo.montanteDoEmprestimoDevido}</td>
 						<td>${emprestimo.dataProximoVencimento}</td>
 						<td>${emprestimo.status}</td>
+						<td>
+							<a title="Editar" href='<c:url value="/formedit/${emprestimo.numeroDoContrato}" />'><span class="glyphicon glyphicon-pencil"></span></a>
+							<a title="Ecluir" href='<c:url value="/delete/${emprestimo.numeroDoContrato}" />'><span class="glyphicon glyphicon-remove"></span></a>
+							<span class="glyphicon glyphicon-list"></span>	
+							<span class="glyphicon glyphicon-check"></span>						
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
+	
 </body>
 </html>
