@@ -48,8 +48,8 @@ public class Pagamento {
 	@JoinColumn(name="ContractID")
 	private Emprestimo emprestimoConcedido;
     
-    @OneToMany
-    @JoinColumn(name="payTypeCode")
+    @OneToMany (cascade = CascadeType.ALL)
+    @JoinColumn(name="PaymentID")
     private List<TipoPagamento> tipoPagamento;
 
 	public Integer getNumeroDoPagamento() {
