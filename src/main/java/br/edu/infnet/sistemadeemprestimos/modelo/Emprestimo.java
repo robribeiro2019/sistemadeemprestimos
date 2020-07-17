@@ -31,7 +31,6 @@ public class Emprestimo {
 	@Column(name="ContractID")
 	private Integer numeroDoContrato;
 	
-	
 	@NotNull(message = "Date de início de contrato é obrigatória")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
@@ -42,7 +41,6 @@ public class Emprestimo {
 	@Temporal(TemporalType.DATE)
 	@Column(name="DateContractEnds")
 	private Date dataFimContrato;	
-	
 
 	@NotNull(message = "Valor do emprestimo é obrigatório")
 	@DecimalMin(value = "0.01", message = "Valor não pode ser menor que 0,01")
