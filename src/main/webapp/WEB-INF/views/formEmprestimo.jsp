@@ -34,36 +34,89 @@
 	
 		<form action='<c:url value="/salvar" />'  method="post">
 		
-		   <input  type="hidden" name="codigo" value="${emprestimo.numeroDoContrato}">
+			<input  type="hidden" name="codigo" value="${emprestimo.numeroDoContrato}">
 		
-		   <div class="form-group" >
-		   	   <label for="nome">Data início do Empréstimo</label>
-		   	   <input
-		   	      type="text"
-		   	      class="form-control"
-		   	      name="dataInicioContrato"
-		   	      id="dataInicioContrato"
-		   	      value="${emprestimo.dataInicioContrato}">		   
-		   </div>
-		   
-		   <div class="form-group" >
-		   	   <label  for="email">Email</label>
-		   	   <input
-		   	      type="text"
-		   	      class="form-control"
-		   	      name="email"
-		   	      id="email"
-		   	      value="${aluno.email}"
-		   	   >		   
-		   </div>
-		   
-		   <input type="submit"  class="btn btn-primary" value="Salvar" >  
-		  
-		    <a class="btn btn-secondary" href='<c:url value="/" />' ><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Voltar para home </a>
-		
-		
+			<div class="row col-12">
+ 
+				<div class="form-group col-4" >
+					<label for="dataInicio">Início de Emprestimo:</label>
+					<input type="date" id="dataInicio" name="dataInicioContrato"> 	   
+				</div>
+  
+				<div class="form-group col-4" >
+					<label for="dataFim">Fim do Emprestimo:</label>
+					<input type="date" id="dataFim" name="dataFimContrato">   		
+				</div>
+  
+				<div class="form-group col-4" >
+					<label for="dataVencimento">Data do vencimento do pagamento:</label>
+					<input type="date" id="dataVencimento" name="dataProximoVencimento">   		
+				</div>
+				
+			</div>
+			<div class="row col-12"> 
+				<div class="form-group col-4" >
+					<label  for="cliente">Cliente</label>
+					<select name="cars" class="form-control col-6">
+					<option selected>Selecione uma Opção</option>
+						<c:forEach items="${cliente}" var="cliente">
+							<option value="${cliente.numeroDoCliente}">${cliente.nomeDoCliente}</option>
+						</c:forEach>
+					</select>
+				</div>
+				
+				<div class="form-group col-4" >	
+					<label  for="banco">Banco</label>
+					<select name="cars" class="form-control col-6">
+						<option selected>Selecione uma Opção</option>
+						<c:forEach items="${coletor}" var="coletor">
+							<option value="${coletor.numeroDoColetor}">${coletor.nomeDoColetor}</option>
+						</c:forEach>
+					</select>
+				</div>
+			</div>
+			<div class="row col-12">   
+				<div class="form-group col-4" >
+			  	   <label  for="montanteEmprestimo">Montante do Emprestimo</label>
+			  	   <input
+			  	      type="text"
+			  	      class="form-control"
+			  	      name="montanteDoEmprestimo"
+			  	      id="montanteEmprestimo"
+			  	   >		   
+				</div>
+			<div class="form-group col-4" >
+				<label  for="montanteEmprestimoDevido">Montante Emprestimo Devido</label>
+				<input
+				   type="text"
+				   class="form-control"
+				   name="montanteDoEmprestimoDevido"
+				   id="montanteEmprestimoDevido"
+				>		   
+			</div>
+		</div>
+		<div class="row col-12">   
+			<div class="form-group col-6" >
+				<label  for="parcelas">Parcelas</label>
+				<input
+					type="text"
+					class="form-control"
+					name="quantidadeDeParcels"
+					id="parcelas"
+				>		   
+			</div>
+			<div class="form-group col-6" >
+				<label  for="txJuros">Taxa de juros</label>
+				<input
+					type="text"
+					class="form-control"
+					name="taxaDeJuros"
+					id="txJuros"
+				>		   
+			</div>
+		</div>
+		<input type="submit"  align="left" class="btn btn-primary" value="Salvar" >  
 		</form>	
-	
 	</div>
 	
 	
