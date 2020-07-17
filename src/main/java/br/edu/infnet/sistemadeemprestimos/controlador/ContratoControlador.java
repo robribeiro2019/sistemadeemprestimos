@@ -62,6 +62,14 @@ public class ContratoControlador {
 	}
 	
 	
+	@RequestMapping(value="/formpag/{numeroDoContrato}", method = RequestMethod.GET )
+	public String formpag( @PathVariable("numeroDoContrato") String id,  Model model) {	
+		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
+		model.addAttribute("emprestimo", emprestimo);
+		model.addAttribute("tipoForm", "Pagamentos");
+		return "/formListaPagamento";
+	}
+	
 	@RequestMapping( value = "/delete/{numeroDoContrato}", method = RequestMethod.GET )
 	public String delete( @PathVariable("numeroDoContrato") String id) {	
 		emprestimoService.delete(id);

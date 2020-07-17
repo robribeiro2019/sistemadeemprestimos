@@ -150,7 +150,7 @@ public class Emprestimo {
 		
 		Date hoje = new Date();
 		
-		if(dataProximoVencimento.compareTo(hoje) > 0) {	
+		if(dataProximoVencimento.compareTo(hoje) > 0 && montanteDoEmprestimoDevido > 0) {	
 			return "Regular";
 		}else if (dataProximoVencimento.compareTo(hoje) < 0 && montanteDoEmprestimoDevido > 0) {
 			return "Vencido";

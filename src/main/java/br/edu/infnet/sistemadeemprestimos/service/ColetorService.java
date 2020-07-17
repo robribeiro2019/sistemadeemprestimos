@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import br.edu.infnet.sistemadeemprestimos.modelo.Coletor;
 import br.edu.infnet.sistemadeemprestimos.repository.ColetorRepository;
 
-
-
 @Service
 public class ColetorService {
 	

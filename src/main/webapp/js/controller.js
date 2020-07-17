@@ -1,5 +1,3 @@
-
-
 function init(nCliente, nColetor){
 	
 	${"#clienteId"}.val(nCliente);

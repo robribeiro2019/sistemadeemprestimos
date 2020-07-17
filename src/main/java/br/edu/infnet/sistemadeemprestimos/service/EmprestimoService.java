@@ -14,7 +14,7 @@ public class EmprestimoService {
 
 	private EmprestimoRepository emprestimoRepositorio;
 
-	@Autowired // injetando a depencia - no construtor
+	@Autowired
 	public EmprestimoService(EmprestimoRepository emprestimoRepositorio) {
 		this.emprestimoRepositorio = emprestimoRepositorio;
 	}
