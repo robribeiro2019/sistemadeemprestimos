@@ -57,7 +57,7 @@
 			<div class="row col-12"> 
 				<div class="form-group col-4" >
 					<label  for="cliente">Cliente</label>
-					<select name="cars" class="form-control col-6">
+					<select name="cliente.numeroDoCliente" class="form-control col-6">
 					<option selected>Selecione uma Opção</option>
 						<c:forEach items="${cliente}" var="cliente">
 							<option value="${cliente.numeroDoCliente}">${cliente.nomeDoCliente}</option>
@@ -67,7 +67,7 @@
 				
 				<div class="form-group col-4" >	
 					<label  for="banco">Banco</label>
-					<select name="cars" class="form-control col-6">
+					<select name="coletor.numeroDoColetor" class="form-control col-6">
 						<option selected>Selecione uma Opção</option>
 						<c:forEach items="${coletor}" var="coletor">
 							<option value="${coletor.numeroDoColetor}">${coletor.nomeDoColetor}</option>
@@ -101,7 +101,7 @@
 				<input
 					type="text"
 					class="form-control"
-					name="quantidadeDeParcels"
+					name="quantidadeDeParcelas"
 					id="parcelas"
 				>		   
 			</div>

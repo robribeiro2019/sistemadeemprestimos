@@ -33,24 +33,17 @@ public class Emprestimo {
 	
 	
 	@NotNull(message = "Date de início de contrato é obrigatória")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	@Column(name="DateContractStarts")
 	private Date dataInicioContrato;	
 
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	@Column(name="DateContractEnds")
 	private Date dataFimContrato;	
 	
-	
-	@NotNull(message = "Valor da taxa de juros é obrigatório")
-	@DecimalMin(value = "0.01", message = "Valor não pode ser menor que 0,01")
-	@DecimalMax(value = "9999999.99", message = "Valor não pode ser maior que 9.999.999,99")
-	@NumberFormat(pattern = "#,##0.00") 
-	@Column(name="InterestRate")
-	private BigDecimal taxaDeJuros;
-	
+
 	@NotNull(message = "Valor do emprestimo é obrigatório")
 	@DecimalMin(value = "0.01", message = "Valor não pode ser menor que 0,01")
 	@DecimalMax(value = "9999999.99", message = "Valor não pode ser maior que 9.999.999,99")
@@ -66,7 +59,7 @@ public class Emprestimo {
 	@Column(name="LoanPaymentFrequency")
 	private Integer quantidadeDeParcelas;	
 	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	@Column(name="LoanPaymentDueDate")
 	private Date dataProximoVencimento;		
@@ -81,7 +74,7 @@ public class Emprestimo {
     
     @Transient
     private String status;
-
+    
 	public Integer getNumeroDoContrato() {
 		return numeroDoContrato;
 	}
@@ -104,14 +97,6 @@ public class Emprestimo {
 
 	public void setDataFimContrato(Date dataFimContrato) {
 		this.dataFimContrato = dataFimContrato;
-	}
-
-	public BigDecimal getTaxaDeJuros() {
-		return taxaDeJuros;
-	}
-
-	public void setTaxaDeJuros(BigDecimal taxaDeJuros) {
-		this.taxaDeJuros = taxaDeJuros;
 	}
 
 	public BigDecimal getMontanteDoEmprestimo() {
