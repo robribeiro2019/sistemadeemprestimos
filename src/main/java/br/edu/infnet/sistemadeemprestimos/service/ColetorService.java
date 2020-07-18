@@ -18,5 +18,7 @@ public class ColetorService {
 		return coletorRepositorio.findAll();
 	}
 	
-
+	public Coletor getColetor(Integer id) {
+		return coletorRepositorio.findById((id)).orElse(new Coletor());
+	}
 }

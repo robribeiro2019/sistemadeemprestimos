@@ -12,12 +12,8 @@ import br.edu.infnet.sistemadeemprestimos.repository.EmprestimoRepository;
 @Service
 public class EmprestimoService {
 
-	private EmprestimoRepository emprestimoRepositorio;
-
 	@Autowired
-	public EmprestimoService(EmprestimoRepository emprestimoRepositorio) {
-		this.emprestimoRepositorio = emprestimoRepositorio;
-	}
+	private EmprestimoRepository emprestimoRepositorio;
 
 	@Transactional
 	public void salvar(Emprestimo emprestimo) {
@@ -29,12 +25,12 @@ public class EmprestimoService {
 	}
 	
 	public Emprestimo getEmprestimo(String id) {
-		return emprestimoRepositorio.getOne(Integer.valueOf(id));
+		return emprestimoRepositorio.findById((Integer.valueOf(id))).orElse(new Emprestimo());
 	}
 	
 	@Transactional
-	public void delete(String id) {
-		emprestimoRepositorio.delete(getEmprestimo(id));
+	public void deletar(String id) {
+		emprestimoRepositorio.delete(getEmprestimo(id ));
 	}	
 
 }

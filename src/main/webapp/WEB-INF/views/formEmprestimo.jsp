@@ -51,10 +51,16 @@
 	
 		<form action='<c:url value="/salvar" />'  method="post">
 		
-			<input  type="hidden" name="codigo" value="${emprestimo.numeroDoContrato}">
-			<input  type="hidden" name="codigoCliente" value="${emprestimo.cliente.numeroDoCliente}">
-			<input  type="hidden" name="codigoColetor" value="${emprestimo.coletor.numeroDoColetor}">
-		
+			<c:set var="tipo" value="${tipoForm}"/>
+			
+			<input  type="hidden" name="numeroDoContrato" value="${emprestimo.numeroDoContrato}">
+			<input  type="hidden" name="tipoForm" value="${tipoForm}">
+			
+			<c:if test="${tipo == 'Editar'}">
+				<input  type="hidden" name="cliente.numeroDoCliente" value="${emprestimo.cliente.numeroDoCliente}">
+				<input  type="hidden" name="coletor.numeroDoColetor" value="${emprestimo.coletor.numeroDoColetor}">
+			</c:if>
+			
 			<div class="row col-12">
  
 				<div class="form-group col-4" >
@@ -76,8 +82,6 @@
 			<div class="row col-12"> 
 				<div class="form-group col-4" >
 					<label  for="cliente">Cliente</label>
-					
-					<c:set var="tipo" value="${tipoForm}"/>
 						<c:if test="${tipo =='Editar'}">
 					  	    <input
 					   	       type="text"

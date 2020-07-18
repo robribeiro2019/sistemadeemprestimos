@@ -30,11 +30,10 @@ public class Coletor {
 	private String nomeDoColetor;
 	
 	@NotNull(message = "Valor da taxa de juros é obrigatório")
-	@DecimalMin(value = "0.01", message = "Valor não pode ser menor que 0,01")
-	@DecimalMax(value = "9999999.99", message = "Valor não pode ser maior que 9.999.999,99")
-	@NumberFormat(pattern = "#,##0.00") 
 	@Column(name="InterestRate")
 	private BigDecimal taxaDeJuros;
+	
+	
 	
 
 	public BigDecimal getTaxaDeJuros() {

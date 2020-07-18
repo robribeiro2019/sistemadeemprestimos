@@ -44,7 +44,7 @@ public class Pagamento {
 	@Column(name="Remarks")
 	private String observacoes;	
 	
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="ContractID")
 	private Emprestimo emprestimoConcedido;
     
@@ -107,7 +107,4 @@ public class Pagamento {
 	public void setTipoPagamento(List<TipoPagamento> tipoPagamento) {
 		this.tipoPagamento = tipoPagamento;
 	}
-
-	
-
 }

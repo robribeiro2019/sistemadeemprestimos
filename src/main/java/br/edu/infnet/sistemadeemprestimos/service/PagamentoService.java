@@ -4,19 +4,24 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.edu.infnet.sistemadeemprestimos.repository.PagamentoRepository;
 import br.edu.infnet.sistemadeemprestimos.modelo.Pagamento;
+import br.edu.infnet.sistemadeemprestimos.repository.PagamentoRepository;
 
 @Service
 public class PagamentoService {
 	
 	@Autowired
-	private PagamentoRepository pagamentorepositorio;
+	private PagamentoRepository pagamentoRepositorio;
   
 	public List<Pagamento> listarTodosPagamentos(){
-		return pagamentorepositorio.findAll();
-	  
-  }
+		return pagamentoRepositorio.findAll();
+	}
+	
+	@Transactional
+	public void salvar(Pagamento pagamento) {
+		pagamentoRepositorio.save(pagamento);
+	}
 
 }

@@ -17,5 +17,9 @@ public class ClienteService {
 	public List<Cliente> listarTodosClientes() {
 		return clienteRepositorio.findAll();
 	}
+	
+	public Cliente getCliente(Integer id) {
+		return clienteRepositorio.findById((id)).orElse(new Cliente());
+	}
 
 }

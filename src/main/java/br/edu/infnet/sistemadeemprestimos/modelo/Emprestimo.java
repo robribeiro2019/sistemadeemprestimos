@@ -2,22 +2,25 @@ package br.edu.infnet.sistemadeemprestimos.modelo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.annotation.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -62,17 +65,32 @@ public class Emprestimo {
 	@Column(name="LoanPaymentDueDate")
 	private Date dataProximoVencimento;		
 	
-    @ManyToOne
+	@OneToOne
 	@JoinColumn(name="CustomerNumber")
 	private Cliente cliente;	
     
-    @ManyToOne
+    @OneToOne
 	@JoinColumn(name="CollectorID")
 	private Coletor coletor;
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="ContractID")
+	private List<Pagamento> pagamentos;
     
     @Transient
     private String status;
     
+    @Transient
+    private String tipoForm;
+    
+	public List<Pagamento> getPagamentos() {
+		return pagamentos;
+	}
+
+	public void setPagamentos(List<Pagamento> pagamentos) {
+		this.pagamentos = pagamentos;
+	}
+
 	public Integer getNumeroDoContrato() {
 		return numeroDoContrato;
 	}
@@ -145,6 +163,14 @@ public class Emprestimo {
 	public void setColetor(Coletor coletor) {
 		this.coletor = coletor;
 	}
+	
+	public String getTipoForm() {
+		return tipoForm;
+	}
+
+	public void setTipoForm(String tipoForm) {
+		this.tipoForm = tipoForm;
+	}
 
 	public String getStatus() {
 		
@@ -161,7 +187,4 @@ public class Emprestimo {
 		return "Sem Status";
 		
 	}	  
-	
-	
-	
 }
