@@ -21,5 +21,4 @@ public class TipoPagamentoService {
 	public TipoPagamento getTipoPagamento(Integer id) {
 		return tipoPagamentoRepositorio.findById((id)).orElse(new TipoPagamento());
 	}
-
 }

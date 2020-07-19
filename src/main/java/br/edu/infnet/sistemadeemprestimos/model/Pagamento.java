@@ -3,7 +3,6 @@ package br.edu.infnet.sistemadeemprestimos.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,13 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -57,13 +54,14 @@ public class Pagamento implements Serializable {
 		super();
 	}
 
-	public Pagamento(BigDecimal pagamentoDoMontante, BigDecimal pagamentoTaxaDeJuros, String observacoes,
+	public Pagamento(BigDecimal pagamentoDoMontante, Date dataVencimento, BigDecimal pagamentoTaxaDeJuros, String observacoes,
 			Emprestimo emprestimoConcedido) {
 		
-		this.pagamentoDoMontante = pagamentoDoMontante;
+		this.pagamentoDoMontante  = pagamentoDoMontante;
+		this.dataVencimento       = dataVencimento;
 		this.pagamentoTaxaDeJuros = pagamentoTaxaDeJuros;
-		this.observacoes = observacoes;
-		this.emprestimoConcedido = emprestimoConcedido;
+		this.observacoes          = observacoes;
+		this.emprestimoConcedido  = emprestimoConcedido;
 	}
 
 	@ManyToOne(cascade = CascadeType.ALL)

@@ -1,9 +1,6 @@
 package br.edu.infnet.sistemadeemprestimos.controller;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -24,6 +21,7 @@ import br.edu.infnet.sistemadeemprestimos.service.ColetorService;
 import br.edu.infnet.sistemadeemprestimos.service.EmprestimoService;
 import br.edu.infnet.sistemadeemprestimos.service.PagamentoService;
 import br.edu.infnet.sistemadeemprestimos.service.TipoPagamentoService;
+import br.edu.infnet.sistemadeemprestimos.util.Util;
 
 @Controller
 public class ContratoController {
@@ -43,7 +41,6 @@ public class ContratoController {
 	@Autowired
 	private TipoPagamentoService tipoPagamentoService;
 	
-	
 	@RequestMapping(value="/", method = RequestMethod.GET )
 	public String listarContratos(Model model) {
 		List<Emprestimo> emprestimo = emprestimoService.listarTodosEmprestimos();
@@ -60,8 +57,8 @@ public class ContratoController {
 		List<Cliente> cliente = clienteService.listarTodosClientes();
 		
 		model.addAttribute("tipoForm", "Novo");
-		model.addAttribute("coletor", coletor);
-		model.addAttribute("cliente", cliente);
+		model.addAttribute("coletor",  coletor);
+		model.addAttribute("cliente",  cliente);
 		
 		return "/formEmprestimo";
 	}
@@ -78,24 +75,15 @@ public class ContratoController {
 		if(emprestimo.getTipoForm().equals("Novo")) {
 			
 			//Calcula o valor das parcelas
-			BigDecimal bgParcela = emprestimo.getMontanteDoEmprestimo().divide(new BigDecimal(emprestimo.getQuantidadeDeParcelas()), 2);
+			BigDecimal bgParcela = Util.calcularValorParcela(emprestimo);
 			
 			IntStream.range(0, emprestimo.getQuantidadeDeParcelas()).forEach(n -> {
-				Pagamento pagamento = new Pagamento();
-				
-				//Soma um mes a cada pagamento
-				LocalDate dateAdd = emprestimo.getDataInicioContrato().toInstant()
-					      .atZone(ZoneId.systemDefault())
-					      .toLocalDate().plusMonths(++n);
-
-				pagamento.setDataVencimento     (Date.from(dateAdd.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-				pagamento.setPagamentoDoMontante (bgParcela);
-				pagamento.setPagamentoTaxaDeJuros(bgParcela.multiply(emprestimo.getColetor().getTaxaDeJuros()).divide(new BigDecimal(100)));
-				pagamento.setEmprestimoConcedido (emprestimo);
-				
-				pagamentoService.salvar(pagamento);
-				
-				pagamento = null;
+				pagamentoService.salvar(
+						new Pagamento(bgParcela, 
+								Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
+								Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
+								"", 
+								emprestimo));
 		    });
 		}
 		
@@ -103,24 +91,26 @@ public class ContratoController {
 	}
 	
 	@RequestMapping(value="/formedit/{numeroDoContrato}", method = RequestMethod.GET )
-	public String formEdit(@PathVariable("numeroDoContrato") String id,  Model model) {	
+	public String formEdit(@PathVariable("numeroDoContrato") String id,  Model model) {
+		
 		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
 		
 		model.addAttribute("emprestimo", emprestimo);
-		model.addAttribute("tipoForm", "Editar");
+		model.addAttribute("tipoForm",   "Editar");
 		
 		return "/formEmprestimo";
 	}
 	
 	
 	@RequestMapping(value="/formpag/{numeroDoContrato}", method = RequestMethod.GET )
-	public String formpag(@PathVariable("numeroDoContrato") String id,  Model model) {	
-		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
+	public String formpag(@PathVariable("numeroDoContrato") String id,  Model model) {
+		
+		Emprestimo          emprestimo    = emprestimoService.getEmprestimo(id);
 		List<TipoPagamento> tipoPagamento = tipoPagamentoService.listarTodosTipoPagamento();
 		
-		model.addAttribute("emprestimo", emprestimo);
+		model.addAttribute("emprestimo",    emprestimo);
 		model.addAttribute("tipoPagamento", tipoPagamento);
-		model.addAttribute("tipoForm",   "Pagamentos");
+		model.addAttribute("tipoForm",      "Pagamentos");
 		
 		return "/formListaPagamento";
 	}
@@ -130,5 +120,4 @@ public class ContratoController {
 		emprestimoService.deletar(id);
 		return "redirect:/";
 	}	
-
 }
