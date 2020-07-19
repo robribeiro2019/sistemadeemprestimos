@@ -163,7 +163,6 @@ public class Emprestimo implements Serializable {
 		return coletor;
 	}
 
-
 	public void setColetor(Coletor coletor) {
 		this.coletor = coletor;
 	}
@@ -178,11 +177,11 @@ public class Emprestimo implements Serializable {
 
 	public String getStatus() {
 		
-		Date hoje = new Date();
+		Date dateNow = new Date();
 		
-		if(dataProximoVencimento.compareTo(hoje) > 0 && montanteDoEmprestimoDevido > 0) {	
+		if(dataProximoVencimento.compareTo(dateNow) > 0 && montanteDoEmprestimoDevido > 0) {	
 			return "Regular";
-		}else if (dataProximoVencimento.compareTo(hoje) < 0 && montanteDoEmprestimoDevido > 0) {
+		}else if (dataProximoVencimento.compareTo(dateNow) < 0 && montanteDoEmprestimoDevido > 0) {
 			return "Vencido";
 		}else if (montanteDoEmprestimoDevido == 0 ){
 			return "Quitado";

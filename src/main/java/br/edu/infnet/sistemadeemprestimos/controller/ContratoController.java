@@ -62,8 +62,9 @@ public class ContratoController {
 	@RequestMapping(value="/salvar", method = RequestMethod.POST )
 	public String form(Model model, Emprestimo emprestimo) {
 		
-		emprestimo.setCliente(clienteService.getCliente(emprestimo.getCliente().getNumeroDoCliente()));
-		emprestimo.setColetor(coletorService.getColetor(emprestimo.getColetor().getNumeroDoColetor()));
+		emprestimo.setCliente                   (clienteService.getCliente(emprestimo.getCliente().getNumeroDoCliente()));
+		emprestimo.setColetor                   (coletorService.getColetor(emprestimo.getColetor().getNumeroDoColetor()));
+		emprestimo.setMontanteDoEmprestimoDevido(emprestimo.getMontanteDoEmprestimo().doubleValue());
 		
 		emprestimoService.salvar(emprestimo);
 			
@@ -89,7 +90,7 @@ public class ContratoController {
 	}
 	
 	@RequestMapping(value="/formedit/{numeroDoContrato}", method = RequestMethod.GET )
-	public String formEdit( @PathVariable("numeroDoContrato") String id,  Model model) {	
+	public String formEdit(@PathVariable("numeroDoContrato") String id,  Model model) {	
 		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
 		
 		model.addAttribute("emprestimo", emprestimo);
