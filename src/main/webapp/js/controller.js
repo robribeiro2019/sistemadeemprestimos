@@ -30,3 +30,11 @@ $(function() {
 
  	})
 });
+
+function goToHome(){
+	location.href="/sisemprestimos/";
+}
+
+function goToNew(){
+	location.href="/sisemprestimos/novo"
+}

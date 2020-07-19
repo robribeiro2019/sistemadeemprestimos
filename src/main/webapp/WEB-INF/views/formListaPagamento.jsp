@@ -23,7 +23,7 @@
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 	
-	<script type="text/javascript" src="js/controller.js"></script>
+	<script type="text/javascript" src="/sisemprestimos/js/controller.js"></script>
 	
 </head>
 <body class="bg-light" onload="init(${emprestimo.cliente.numeroDoCliente},${emprestimo.coletor.numeroDoColetor},${pagamentos.tipoPagamento.idTipoPagamento})">
@@ -38,16 +38,19 @@
 			<i class="fa fa-handshake-o"> Sistema de empréstimos </i> 
 		</h1>
 			
-		<div class="table-info">
-			<nav aria-label="breadcrumb">
-			  <ol class="breadcrumb">
-			    <li class="breadcrumb-item"><a href='<c:url value="/" />'>Lista de empréstimos</a></li>
-			    <li class="breadcrumb-item"><a href='<c:url value="/novo" />'>Criar novo empréstimo</a></li>
-			  </ol>
-			</nav>
-		</div>
+				
 		
-		<h3 align="left">Detalhes do empréstimo</h3>		
+		<div class="d-flex justify-content-between">
+			
+			<h3 class="mt-2" align="left">Detalhes do empréstimo</h3>	
+			
+			<div class="d-flex justify-content-between">
+				<button class="mx-auto btn btn-primary" style="height:35px!important; width:100px!important" onclick="goToHome()">Listar</button>
+				&nbsp;
+				<button class="mx-auto btn btn-primary" style="height:35px!important; width:100px!important" onclick="goToNew()">Criar</button>
+				
+			</div>
+		</div>
 		
 	</div>
 	
