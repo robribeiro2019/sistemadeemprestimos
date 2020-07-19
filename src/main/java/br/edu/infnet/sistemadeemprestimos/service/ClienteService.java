@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.edu.infnet.sistemadeemprestimos.modelo.Cliente;
+import br.edu.infnet.sistemadeemprestimos.model.Cliente;
 import br.edu.infnet.sistemadeemprestimos.repository.ClienteRepository;
 
 @Service
@@ -21,5 +21,4 @@ public class ClienteService {
 	public Cliente getCliente(Integer id) {
 		return clienteRepositorio.findById((id)).orElse(new Cliente());
 	}
-
 }

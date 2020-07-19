@@ -1,4 +1,6 @@
-package br.edu.infnet.sistemadeemprestimos.modelo;
+package br.edu.infnet.sistemadeemprestimos.model;
+
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,11 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.lang.NonNull;
 
 @Entity
 @Table(name="Customer")
-public class Cliente {
+public class Cliente implements Serializable {
+
+	private static final long serialVersionUID = -6303035483179479166L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,5 +54,8 @@ public class Cliente {
 		this.enderecoDoCliente = enderecoDoCliente;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 }

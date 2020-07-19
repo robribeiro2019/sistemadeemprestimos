@@ -1,5 +1,6 @@
-package br.edu.infnet.sistemadeemprestimos.modelo;
+package br.edu.infnet.sistemadeemprestimos.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +18,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.lang.NonNull;
 
 @Entity
 @Table(name="Payment")
-public class Pagamento {
+public class Pagamento implements Serializable {
 	
+	private static final long serialVersionUID = -409252652793914658L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="PaymentID")
@@ -30,27 +34,42 @@ public class Pagamento {
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="DateOfPayment")
-	private Date DataDoPagamento;
+	private Date dataDoPagamento;
 	
 	@NonNull
 	@Column(name="AmountOfPayment")
-	private BigDecimal PagamentoDoMontante;	
+	private BigDecimal pagamentoDoMontante;	
 	
 	@NonNull
 	@Column(name="InterestRatePayment")
-	private BigDecimal PagamentoTaxaDeJuros;		
+	private BigDecimal pagamentoTaxaDeJuros;		
 	
 	@NonNull
 	@Column(name="Remarks")
-	private String observacoes;	
+	private String observacoes;
 	
-    @ManyToOne(cascade = CascadeType.ALL)
+    public Pagamento() {
+		super();
+	}
+
+	public Pagamento(BigDecimal pagamentoDoMontante, BigDecimal pagamentoTaxaDeJuros, String observacoes,
+			Emprestimo emprestimoConcedido) {
+		
+		this.pagamentoDoMontante = pagamentoDoMontante;
+		this.pagamentoTaxaDeJuros = pagamentoTaxaDeJuros;
+		this.observacoes = observacoes;
+		this.emprestimoConcedido = emprestimoConcedido;
+	}
+
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="ContractID")
 	private Emprestimo emprestimoConcedido;
     
     @OneToMany (cascade = CascadeType.ALL)
     @JoinColumn(name="PaymentID")
     private List<TipoPagamento> tipoPagamento;
+    
+    
 
 	public Integer getNumeroDoPagamento() {
 		return numeroDoPagamento;
@@ -61,27 +80,27 @@ public class Pagamento {
 	}
 
 	public Date getDataDoPagamento() {
-		return DataDoPagamento;
+		return dataDoPagamento;
 	}
 
 	public void setDataDoPagamento(Date dataDoPagamento) {
-		DataDoPagamento = dataDoPagamento;
+		this.dataDoPagamento = dataDoPagamento;
 	}
 
 	public BigDecimal getPagamentoDoMontante() {
-		return PagamentoDoMontante;
+		return pagamentoDoMontante;
 	}
 
 	public void setPagamentoDoMontante(BigDecimal pagamentoDoMontante) {
-		PagamentoDoMontante = pagamentoDoMontante;
+		this.pagamentoDoMontante = pagamentoDoMontante;
 	}
 
 	public BigDecimal getPagamentoTaxaDeJuros() {
-		return PagamentoTaxaDeJuros;
+		return pagamentoTaxaDeJuros;
 	}
 
 	public void setPagamentoTaxaDeJuros(BigDecimal pagamentoTaxaDeJuros) {
-		PagamentoTaxaDeJuros = pagamentoTaxaDeJuros;
+		this.pagamentoTaxaDeJuros = pagamentoTaxaDeJuros;
 	}
 
 	public String getObservacoes() {
@@ -106,5 +125,10 @@ public class Pagamento {
 
 	public void setTipoPagamento(List<TipoPagamento> tipoPagamento) {
 		this.tipoPagamento = tipoPagamento;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

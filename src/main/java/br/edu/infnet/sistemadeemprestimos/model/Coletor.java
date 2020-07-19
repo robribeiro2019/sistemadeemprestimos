@@ -1,5 +1,6 @@
-package br.edu.infnet.sistemadeemprestimos.modelo;
+package br.edu.infnet.sistemadeemprestimos.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
@@ -8,18 +9,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.format.annotation.NumberFormat;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.lang.NonNull;
 
 
 @Entity
 @Table(name="Collector")
-public class Coletor {
+public class Coletor implements Serializable {
 	
+	private static final long serialVersionUID = 6703371814159881926L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="CollectorID")
@@ -32,9 +33,6 @@ public class Coletor {
 	@NotNull(message = "Valor da taxa de juros é obrigatório")
 	@Column(name="InterestRate")
 	private BigDecimal taxaDeJuros;
-	
-	
-	
 
 	public BigDecimal getTaxaDeJuros() {
 		return taxaDeJuros;
@@ -60,5 +58,8 @@ public class Coletor {
 		this.nomeDoColetor = nomeDoColetor;
 	}
 
-	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 }

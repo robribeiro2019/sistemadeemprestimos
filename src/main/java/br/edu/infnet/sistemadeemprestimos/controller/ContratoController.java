@@ -1,4 +1,4 @@
-package br.edu.infnet.sistemadeemprestimos.controlador;
+package br.edu.infnet.sistemadeemprestimos.controller;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import br.edu.infnet.sistemadeemprestimos.modelo.Cliente;
-import br.edu.infnet.sistemadeemprestimos.modelo.Coletor;
-import br.edu.infnet.sistemadeemprestimos.modelo.Emprestimo;
-import br.edu.infnet.sistemadeemprestimos.modelo.Pagamento;
+import br.edu.infnet.sistemadeemprestimos.model.Cliente;
+import br.edu.infnet.sistemadeemprestimos.model.Coletor;
+import br.edu.infnet.sistemadeemprestimos.model.Emprestimo;
+import br.edu.infnet.sistemadeemprestimos.model.Pagamento;
 import br.edu.infnet.sistemadeemprestimos.service.ClienteService;
 import br.edu.infnet.sistemadeemprestimos.service.ColetorService;
 import br.edu.infnet.sistemadeemprestimos.service.EmprestimoService;
 import br.edu.infnet.sistemadeemprestimos.service.PagamentoService;
 
 @Controller
-public class ContratoControlador {
+public class ContratoController {
 	
 	@Autowired
 	private EmprestimoService emprestimoService;
@@ -75,7 +75,6 @@ public class ContratoControlador {
 				Pagamento pagamento = new Pagamento();
 
 				pagamento.setDataDoPagamento     (new Date());
-				pagamento.setObservacoes         ("Teste");
 				pagamento.setPagamentoDoMontante (bgParcela);
 				pagamento.setPagamentoTaxaDeJuros(bgParcela.multiply(emprestimo.getColetor().getTaxaDeJuros()).divide(new BigDecimal(100)));
 				pagamento.setEmprestimoConcedido (emprestimo);

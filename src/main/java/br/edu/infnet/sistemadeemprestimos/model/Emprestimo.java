@@ -1,5 +1,6 @@
-package br.edu.infnet.sistemadeemprestimos.modelo;
+package br.edu.infnet.sistemadeemprestimos.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -21,14 +22,17 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 
 @Entity
 @Table(name="LoanContract")
-public class Emprestimo {
+public class Emprestimo implements Serializable {
 	
+	private static final long serialVersionUID = 507293577398905243L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="ContractID")
@@ -185,6 +189,10 @@ public class Emprestimo {
 		}
 		
 		return "Sem Status";
-		
-	}	  
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 }

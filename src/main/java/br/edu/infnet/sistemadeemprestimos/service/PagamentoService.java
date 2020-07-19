@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.edu.infnet.sistemadeemprestimos.modelo.Pagamento;
+import br.edu.infnet.sistemadeemprestimos.model.Pagamento;
 import br.edu.infnet.sistemadeemprestimos.repository.PagamentoRepository;
 
 @Service
@@ -23,5 +23,4 @@ public class PagamentoService {
 	public void salvar(Pagamento pagamento) {
 		pagamentoRepositorio.save(pagamento);
 	}
-
 }
