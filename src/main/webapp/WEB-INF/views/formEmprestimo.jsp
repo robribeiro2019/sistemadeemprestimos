@@ -63,18 +63,23 @@
 			<div class="row col-12">
  
 				<div class="form-group col-4" >
-					<label for="dataInicio">Início de Emprestimo:</label>
-					<input class="form-control" type="date" id="dataInicio" name="dataInicioContrato" value="${emprestimo.dataInicioContrato}"> 	   
+					<label for="dataInicio">Início do Emprestimo:</label>
+					<c:if test="${tipo =='Editar'}">
+					<input disabled class="form-control" type="date" id="dataInicio1" name="dataInicioContrato" value="${emprestimo.dataInicioContrato}"> 
+					</c:if>	
+					<c:if test="${tipo =='Novo'}">
+					<input class="form-control" type="date" id="dataInicio1" name="dataInicioContrato" value="${emprestimo.dataInicioContrato}"> 
+					</c:if>   
 				</div>
   
 				<div class="form-group col-4" >
-					<label for="dataFim">Fim do Emprestimo:</label>
-					<input class="form-control" type="date" id="dataFim" name="dataFimContrato" value="${emprestimo.dataFimContrato}">   		
+					<label for="text">Fim do Emprestimo:</label>
+					<input disabled class="form-control" type="date" id="dataFim" name="dataFimContrato" value="${emprestimo.dataFimContrato}">   		
 				</div>
   
 				<div class="form-group col-4" >
-					<label for="dataVencimento">Data do vencimento do pagamento:</label>
-					<input class="form-control" type="date" id="dataVencimento" name="dataProximoVencimento" value="${emprestimo.dataProximoVencimento}">   		
+					<label for="dataVencimento">Data do próximo vencimento:</label>
+					<input disabled class="form-control" type="date" id="dataVencimento1" name="dataProximoVencimento" value="${emprestimo.dataProximoVencimento}">   		
 				</div>
 				
 			</div>
@@ -104,8 +109,7 @@
 				<div class="form-group col-4" >	
 					<label  for="banco">Banco</label>
 					
-					<c:set var="tipo2" value="${tipoForm}"/>
-						<c:if test="${tipo2 =='Editar'}">
+						<c:if test="${tipo =='Editar'}">
 					  	    <input
 					   	       type="text"
 					   	       disabled
@@ -114,7 +118,7 @@
 					  	       id="nomeDoColetor"
 					  	       value="${emprestimo.coletor.nomeDoColetor}">
 						</c:if>
-						<c:if test="${tipo2 =='Novo'}">
+						<c:if test="${tipo =='Novo'}">
 							<select class="form-control form-control-lg" name="coletor.numeroDoColetor" id="coletorId" required>
 								<option selected>Selecione uma Opção</option>
 								<c:forEach items="${coletor}" var="coletor">
@@ -126,12 +130,23 @@
 				</div>
 				<div class="form-group col-4" >
 			  	   <label  for="montanteEmprestimo">Montante do Emprestimo</label>
+			  	   <c:if test="${tipo =='Editar'}">
+			  	   <input
+			  	   	  disabled
+			  	      type="text"
+			  	      class="form-control"
+			  	      name="montanteDoEmprestimo"
+			  	      id="montanteEmprestimo"
+			  	      value="${emprestimo.montanteDoEmprestimo}">
+			  	    </c:if>  
+			  	   <c:if test="${tipo =='Novo'}">
 			  	   <input
 			  	      type="text"
 			  	      class="form-control"
 			  	      name="montanteDoEmprestimo"
 			  	      id="montanteEmprestimo"
-			  	      value="${emprestimo.montanteDoEmprestimo}">		   
+			  	      value="${emprestimo.montanteDoEmprestimo}">
+			  	    </c:if> 
 				</div>				
 			</div>
 			<div class="row col-12">   
@@ -146,17 +161,29 @@
 				   id="montanteEmprestimoDevido"
 				   value="${emprestimo.montanteDoEmprestimoDevido}">		   
 			</div>
-			<div class="form-group col-4"" >
+			<div class="form-group col-4" >
 				<label  for="parcelas">Parcelas</label>
+				<c:if test="${tipo =='Editar'}">
+				<input
+				    disabled
+					type="text"
+					onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+					class="form-control"
+					name="quantidadeDeParcelas"
+					id="parcelas"
+					value="${emprestimo.quantidadeDeParcelas}">
+				</c:if>	
+				<c:if test="${tipo =='Novo'}">
 				<input
 					type="text"
 					onkeypress="return event.charCode >= 48 && event.charCode <= 57"
 					class="form-control"
 					name="quantidadeDeParcelas"
 					id="parcelas"
-					value="${emprestimo.quantidadeDeParcelas}">		   
+					value="${emprestimo.quantidadeDeParcelas}">
+				</c:if>						   
 			</div>	
-				<div class="form-group col-4"" >
+			<div class="form-group col-4" >
 				<label  for="txJuros">Taxa de juros</label>
 				<input
 				    disabled

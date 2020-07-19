@@ -65,7 +65,7 @@
 			<div class="row col-12">
  
 				<div class="form-group col-4" >
-					<label for="dataInicio">Início de Emprestimo:</label>
+					<label for="dataInicio">Início do Emprestimo:</label>
 					<input disabled class="form-control" type="date" id="dataInicio" name="dataInicioContrato" value="${emprestimo.dataInicioContrato}"> 	   
 				</div>
   
@@ -75,7 +75,7 @@
 				</div>
   
 				<div class="form-group col-4" >
-					<label for="dataVencimento">Data do vencimento do pagamento:</label>
+					<label for="dataVencimento">Data do próximo vencimento:</label>
 					<input disabled class="form-control" type="date" id="dataVencimento" name="dataProximoVencimento" value="${emprestimo.dataProximoVencimento}">   		
 				</div>
 				
