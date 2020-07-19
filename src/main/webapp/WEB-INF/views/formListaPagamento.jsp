@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 	
@@ -149,20 +149,20 @@
 					<th>Valor pagamento</th>
 					<th>Taxa de Juros</th>
 					<th>Observacoes</th>
-					<th>Status</th>
+<!-- 					<th>Status</th> -->
 					<th>Ação</th>
 				</tr>
 			</thead>
 			<tbody>
-
+				<c:forEach items="${emprestimo.pagamentos}" var="pagamento">
 					<tr>
-						<td>${emprestimo.numeroDoContrato}</td>
-						<td>${emprestimo.coletor.nomeDoColetor}</td>						
-						<td>${emprestimo.dataFimContrato}</td>
-						<td>${emprestimo.montanteDoEmprestimoDevido}</td>
-						<td>${emprestimo.dataProximoVencimento}</td>
+						<td>${pagamento.numeroDoPagamento}</td>
+						<td>${pagamento.dataDoPagamento}</td>						
+						<td>${pagamento.pagamentoDoMontante}</td>
+						<td>${pagamento.pagamentoTaxaDeJuros}</td>
+						<td>${pagamento.observacoes}</td>
 						
-						<c:set var="status" value="${emprestimo.status}"/>
+<%-- 						<c:set var="status" value="${emprestimo.status}"/>
 						<c:if test="${status =='Vencido'}">
 							 <td class="table-danger">${emprestimo.status}</td>
 						</c:if>
@@ -171,7 +171,7 @@
 						</c:if>						
 						<c:if test="${status =='Quitado'}">
 							 <td class="table-success">${emprestimo.status}</td>
-						</c:if>							
+						</c:if>	 --%>						
 						
 						<td  class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
 							<a title="Editar" href='<c:url value="/formedit/${emprestimo.numeroDoContrato}" />'><span class="glyphicon glyphicon-pencil"></span></a>
@@ -180,7 +180,7 @@
 							<span class="glyphicon glyphicon-plus"></span>						
 						</td>
 					</tr>
-
+				</c:forEach>
 			</tbody>
 		</table>		
 	</div>

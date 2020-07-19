@@ -1,6 +1,8 @@
 package br.edu.infnet.sistemadeemprestimos.controller;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -70,12 +72,18 @@ public class ContratoController {
 			
 		if(emprestimo.getTipoForm().equals("Novo")) {
 			
+			//Calcula o valor das parcelas
 			BigDecimal bgParcela = emprestimo.getMontanteDoEmprestimo().divide(new BigDecimal(emprestimo.getQuantidadeDeParcelas()), 2);
 			
 			IntStream.range(0, emprestimo.getQuantidadeDeParcelas()).forEach(n -> {
 				Pagamento pagamento = new Pagamento();
+				
+				//Soma um mes a cada pagamento
+				LocalDate dateAdd = emprestimo.getDataInicioContrato().toInstant()
+					      .atZone(ZoneId.systemDefault())
+					      .toLocalDate().plusMonths(++n);
 
-				pagamento.setDataDoPagamento     (new Date());
+				pagamento.setDataDoPagamento     (Date.from(dateAdd.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 				pagamento.setPagamentoDoMontante (bgParcela);
 				pagamento.setPagamentoTaxaDeJuros(bgParcela.multiply(emprestimo.getColetor().getTaxaDeJuros()).divide(new BigDecimal(100)));
 				pagamento.setEmprestimoConcedido (emprestimo);
@@ -101,11 +109,11 @@ public class ContratoController {
 	
 	
 	@RequestMapping(value="/formpag/{numeroDoContrato}", method = RequestMethod.GET )
-	public String formpag( @PathVariable("numeroDoContrato") String id,  Model model) {	
+	public String formpag(@PathVariable("numeroDoContrato") String id,  Model model) {	
 		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
 		
 		model.addAttribute("emprestimo", emprestimo);
-		model.addAttribute("tipoForm", "Pagamentos");
+		model.addAttribute("tipoForm",   "Pagamentos");
 		
 		return "/formListaPagamento";
 	}
