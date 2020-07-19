@@ -168,7 +168,9 @@
 			</div>
 			</div>
 		<hr class="mb-4">
-		<input class="btn btn-primary btn-lg btn-block" type="submit"  align="left" value="Salvar" >  
+		<div class="container">
+			<input class="btn btn-primary btn-lg" style="margin-left: 45%!important" type="submit" value="Salvar" >  
+		</div>
 		
 		</form>	
 	</div>
