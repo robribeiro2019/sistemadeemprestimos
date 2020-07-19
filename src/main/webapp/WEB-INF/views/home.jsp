@@ -45,7 +45,8 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="js/controller.js"></script>
+<script type="text/javascript" src="/sisemprestimos/js/jquery-dateformat.min.js"></script>
+<script type="text/javascript" src="/sisemprestimos/js/controller.js"></script>
 </head>
 <body class="bg-light">
 
@@ -98,11 +99,11 @@
 						<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">${emprestimo.numeroDoContrato}</td>
 						<td>${emprestimo.cliente.nomeDoCliente}</td>
 						<td>${emprestimo.coletor.nomeDoColetor}</td>
-						<td>${emprestimo.dataInicioContrato}</td>
-						<td>${emprestimo.dataFimContrato}</td>
+						<td><script>formatDate('${emprestimo.dataInicioContrato}');</script></td>
+						<td><script>formatDate('${emprestimo.dataFimContrato}');</script></td>
 						<td>${emprestimo.montanteDoEmprestimoDevido}</td>
-						<td>${emprestimo.dataProximoVencimento}</td>
-
+						<td><script>formatDate('${emprestimo.dataProximoVencimento}');</script></td>
+						
 						<c:set var="status" value="${emprestimo.status}" />
 						<c:if test="${status =='Vencido'}">
 							<td class="table-danger">${emprestimo.status}</td>

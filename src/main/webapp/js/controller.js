@@ -38,3 +38,14 @@ function goToHome(){
 function goToNew(){
 	location.href="/sisemprestimos/novo"
 }
+
+function formatDate(date){
+
+	if(date == '' 
+		|| date == 'undefined') {
+		document.write('');
+		return;
+	}
+	
+	document.write($.format.date(date + ' 00:00:00.000', 'dd/MM/yyyy'));
+}

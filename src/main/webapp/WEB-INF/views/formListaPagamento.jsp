@@ -23,6 +23,7 @@
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 	
+	<script type="text/javascript" src="/sisemprestimos/js/jquery-dateformat.min.js"></script>
 	<script type="text/javascript" src="/sisemprestimos/js/controller.js"></script>
 	
 </head>
@@ -165,8 +166,8 @@
 				<c:forEach items="${emprestimo.pagamentos}" var="pagamento">
 					<tr>
 						<td>${pagamento.numeroDoPagamento}</td>
-						<td>${pagamento.dataVencimento}</td>
-						<td>${pagamento.dataDoPagamento}</td>						
+						<td><script>formatDate('${pagamento.dataVencimento}');</script></td>
+						<td><script>formatDate('${pagamento.dataDoPagamento}');</script></td>						
 						<td>${pagamento.pagamentoDoMontante}</td>
 						<td>${pagamento.pagamentoTaxaDeJuros}</td>
 						<td class="pt-3-half" contenteditable="true">
