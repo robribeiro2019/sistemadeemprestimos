@@ -77,12 +77,23 @@ public class Emprestimo implements Serializable {
     @JoinColumn(name="ContractID")
 	private List<Pagamento> pagamentos;
     
+	@Column(name="Remarks")
+	private String observacoes;
+    
     @Transient
     private String status;
     
     @Transient
     private String tipoForm;
     
+	public String getObservacoes() {
+		return observacoes;
+	}
+
+	public void setObservacoes(String observacoes) {
+		this.observacoes = observacoes;
+	}
+
 	public List<Pagamento> getPagamentos() {
 		return pagamentos;
 	}

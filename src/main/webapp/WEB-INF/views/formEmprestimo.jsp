@@ -65,7 +65,7 @@
 				<div class="form-group col-4" >
 					<label for="dataInicio">Início do Emprestimo:</label>
 					<c:if test="${tipo =='Editar'}">
-					<input disabled class="form-control" type="date" id="dataInicio1" name="dataInicioContrato" value="${emprestimo.dataInicioContrato}"> 
+					<input readonly="readonly" class="form-control" type="date" id="dataInicio1" name="dataInicioContrato" value="${emprestimo.dataInicioContrato}"> 
 					</c:if>	
 					<c:if test="${tipo =='Novo'}">
 					<input class="form-control" type="date" id="dataInicio1" name="dataInicioContrato" value="${emprestimo.dataInicioContrato}"> 
@@ -74,12 +74,12 @@
   
 				<div class="form-group col-4" >
 					<label for="text">Fim do Emprestimo:</label>
-					<input disabled class="form-control" type="date" id="dataFim" name="dataFimContrato" value="${emprestimo.dataFimContrato}">   		
+					<input readonly="readonly" class="form-control" type="date" id="dataFim" name="dataFimContrato" value="${emprestimo.dataFimContrato}">   		
 				</div>
   
 				<div class="form-group col-4" >
 					<label for="dataVencimento">Data do próximo vencimento:</label>
-					<input disabled class="form-control" type="date" id="dataVencimento1" name="dataProximoVencimento" value="${emprestimo.dataProximoVencimento}">   		
+					<input readonly="readonly" class="form-control" type="date" id="dataVencimento1" name="dataProximoVencimento" value="${emprestimo.dataProximoVencimento}">   		
 				</div>
 				
 			</div>
@@ -89,7 +89,7 @@
 						<c:if test="${tipo =='Editar'}">
 					  	    <input
 					   	       type="text"
-					   	       disabled
+					   	       readonly="readonly"
 					  	       class="form-control"
 					  	       name="nomeDoCliente"
 					  	       id="nomeDoCliente"
@@ -112,7 +112,7 @@
 						<c:if test="${tipo =='Editar'}">
 					  	    <input
 					   	       type="text"
-					   	       disabled
+					   	       readonly="readonly"
 					  	       class="form-control"
 					  	       name="nomeDoColetor"
 					  	       id="nomeDoColetor"
@@ -132,7 +132,7 @@
 			  	   <label  for="montanteEmprestimo">Montante do Emprestimo</label>
 			  	   <c:if test="${tipo =='Editar'}">
 			  	   <input
-			  	   	  disabled
+			  	   	  readonly="readonly"
 			  	      type="text"
 			  	      class="form-control"
 			  	      name="montanteDoEmprestimo"
@@ -154,7 +154,7 @@
 			<div class="form-group col-4" >
 				<label  for="montanteEmprestimoDevido">Montante Emprestimo Devido</label>
 				<input
-				   disabled
+				   readonly="readonly"
 				   type="text"
 				   class="form-control"
 				   name="montanteDoEmprestimoDevido"
@@ -165,7 +165,7 @@
 				<label  for="parcelas">Parcelas</label>
 				<c:if test="${tipo =='Editar'}">
 				<input
-				    disabled
+				    readonly="readonly"
 					type="text"
 					onkeypress="return event.charCode >= 48 && event.charCode <= 57"
 					class="form-control"
@@ -186,13 +186,22 @@
 			<div class="form-group col-4" >
 				<label  for="txJuros">Taxa de juros</label>
 				<input
-				    disabled
+				    readonly="readonly"
 					type="text"
 					class="form-control"
 					name="taxaDeJuros"
 					id="txJuros"
 					value="${emprestimo.coletor.taxaDeJuros}">		   
 			</div>
+			<div class="form-group col-12" >
+				<label  for="txJuros">Observações</label>
+				<input
+					type="text"
+					class="form-control"
+					name="observacoes"
+					id="observacoes"
+					value="${emprestimo.observacoes}">		   
+			</div>			
 			</div>
 		<hr class="mb-4">
 		<div class="container">
