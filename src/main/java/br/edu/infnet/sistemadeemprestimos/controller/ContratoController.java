@@ -18,10 +18,12 @@ import br.edu.infnet.sistemadeemprestimos.model.Cliente;
 import br.edu.infnet.sistemadeemprestimos.model.Coletor;
 import br.edu.infnet.sistemadeemprestimos.model.Emprestimo;
 import br.edu.infnet.sistemadeemprestimos.model.Pagamento;
+import br.edu.infnet.sistemadeemprestimos.model.TipoPagamento;
 import br.edu.infnet.sistemadeemprestimos.service.ClienteService;
 import br.edu.infnet.sistemadeemprestimos.service.ColetorService;
 import br.edu.infnet.sistemadeemprestimos.service.EmprestimoService;
 import br.edu.infnet.sistemadeemprestimos.service.PagamentoService;
+import br.edu.infnet.sistemadeemprestimos.service.TipoPagamentoService;
 
 @Controller
 public class ContratoController {
@@ -37,6 +39,9 @@ public class ContratoController {
 	
 	@Autowired
 	private PagamentoService pagamentoService;
+	
+	@Autowired
+	private TipoPagamentoService tipoPagamentoService;
 	
 	
 	@RequestMapping(value="/", method = RequestMethod.GET )
@@ -83,7 +88,7 @@ public class ContratoController {
 					      .atZone(ZoneId.systemDefault())
 					      .toLocalDate().plusMonths(++n);
 
-				pagamento.setDataDoPagamento     (Date.from(dateAdd.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+				pagamento.setDataVencimento     (Date.from(dateAdd.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 				pagamento.setPagamentoDoMontante (bgParcela);
 				pagamento.setPagamentoTaxaDeJuros(bgParcela.multiply(emprestimo.getColetor().getTaxaDeJuros()).divide(new BigDecimal(100)));
 				pagamento.setEmprestimoConcedido (emprestimo);
@@ -111,8 +116,10 @@ public class ContratoController {
 	@RequestMapping(value="/formpag/{numeroDoContrato}", method = RequestMethod.GET )
 	public String formpag(@PathVariable("numeroDoContrato") String id,  Model model) {	
 		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
+		List<TipoPagamento> tipoPagamento = tipoPagamentoService.listarTodosTipoPagamento();
 		
 		model.addAttribute("emprestimo", emprestimo);
+		model.addAttribute("tipoPagamento", tipoPagamento);
 		model.addAttribute("tipoForm",   "Pagamentos");
 		
 		return "/formListaPagamento";

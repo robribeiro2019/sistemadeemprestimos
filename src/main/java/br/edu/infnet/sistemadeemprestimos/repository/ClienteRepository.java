@@ -5,6 +5,5 @@ import org.springframework.stereotype.Repository;
 
 import br.edu.infnet.sistemadeemprestimos.model.Cliente;
 
-
 @Repository
 public interface ClienteRepository  extends JpaRepository<Cliente, Integer> {}

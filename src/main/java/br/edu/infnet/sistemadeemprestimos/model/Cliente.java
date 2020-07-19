@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.lang.NonNull;
 
 @Entity
 @Table(name="Customer")
@@ -23,7 +22,6 @@ public class Cliente implements Serializable {
 	@Column(name="CustomerNumber")
 	private Integer numeroDoCliente;
 	
-	@NonNull
 	@Column(name="CustomerName")
 	private String nomeDoCliente;
 	

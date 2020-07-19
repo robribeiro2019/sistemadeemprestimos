@@ -14,12 +14,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.lang.NonNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="Payment")
@@ -36,15 +39,17 @@ public class Pagamento implements Serializable {
 	@Column(name="DateOfPayment")
 	private Date dataDoPagamento;
 	
-	@NonNull
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.DATE)
+	@Column(name="DueDate")
+	private Date dataVencimento;	
+	
 	@Column(name="AmountOfPayment")
 	private BigDecimal pagamentoDoMontante;	
 	
-	@NonNull
 	@Column(name="InterestRatePayment")
 	private BigDecimal pagamentoTaxaDeJuros;		
 	
-	@NonNull
 	@Column(name="Remarks")
 	private String observacoes;
 	
@@ -65,10 +70,13 @@ public class Pagamento implements Serializable {
 	@JoinColumn(name="ContractID")
 	private Emprestimo emprestimoConcedido;
     
-    @OneToMany (cascade = CascadeType.ALL)
-    @JoinColumn(name="PaymentID")
-    private List<TipoPagamento> tipoPagamento;
+   
+    @OneToOne
+    @JoinColumn(name="payTypeCode")
+    private TipoPagamento tipoPagamento;
     
+    @Transient
+    private String status;
     
 
 	public Integer getNumeroDoPagamento() {
@@ -119,12 +127,37 @@ public class Pagamento implements Serializable {
 		this.emprestimoConcedido = emprestimoConcedido;
 	}
 
-	public List<TipoPagamento> getTipoPagamento() {
+	
+	public TipoPagamento getTipoPagamento() {
 		return tipoPagamento;
 	}
 
-	public void setTipoPagamento(List<TipoPagamento> tipoPagamento) {
+	public void setTipoPagamento(TipoPagamento tipoPagamento) {
 		this.tipoPagamento = tipoPagamento;
+	}
+
+	
+	public Date getDataVencimento() {
+		return dataVencimento;
+	}
+
+	public void setDataVencimento(Date dataVencimento) {
+		this.dataVencimento = dataVencimento;
+	}
+
+	public String getStatus() {
+		
+		Date dateNow = new Date();
+		
+		if(dataVencimento.compareTo(dateNow) > 0 && dataDoPagamento==null) {	
+			return "Regular";
+		}else if (dataVencimento.compareTo(dateNow) < 0 && dataDoPagamento==null) {
+			return "Vencido";
+		}else if (dataDoPagamento!=null ){
+			return "Quitado";
+		}
+		
+		return "Sem Status";
 	}
 	
 	@Override

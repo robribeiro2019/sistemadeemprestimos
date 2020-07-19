@@ -21,6 +21,11 @@
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 	
+	<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.3.1/jquery.quicksearch.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
 	<script type="text/javascript" src="js/controller.js"></script>
 </head>
 <body class="bg-light">
@@ -44,9 +49,15 @@
 		
 		<h3 align="left">Lista de empréstimos</h3>	
 		
+
 	</div>
-		
-		<table class="table table-sm">
+	
+		<div class="form-group input-group">
+			  <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+			  <input name="consulta" id="txt_consulta" placeholder="Localizar" type="text" class="form-control">
+		</div>		
+	
+		<table id="tabela" class="table table-hover">
 			<thead class="thead-dark">
 				<tr>
 					<th>Nº contrato</th>
@@ -93,7 +104,8 @@
 			</tbody>
 		</table>
 	</div>
-	
-	
+	<script>
+		  $('input#txt_consulta').quicksearch('table#tabela tbody tr');
+	</script>	
 </body>
 </html>

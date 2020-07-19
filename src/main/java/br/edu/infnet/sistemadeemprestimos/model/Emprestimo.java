@@ -50,8 +50,6 @@ public class Emprestimo implements Serializable {
 	private Date dataFimContrato;	
 
 	@NotNull(message = "Valor do emprestimo é obrigatório")
-	@DecimalMin(value = "0.01", message = "Valor não pode ser menor que 0,01")
-	@DecimalMax(value = "9999999.99", message = "Valor não pode ser maior que 9.999.999,99")
 	@NumberFormat(pattern = "#,##0.00")  
 	@Column(name="LoanAmount")
 	private BigDecimal montanteDoEmprestimo;	

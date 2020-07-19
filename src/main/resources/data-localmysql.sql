@@ -9,5 +9,7 @@ insert into collector (collector_name, Interest_rate) values ('Banco Bradesco', 
 insert into collector (collector_name, Interest_rate) values ('NuBank', 12.6);
 insert into collector (collector_name, Interest_rate) values ('Banco do Brasil', 25.0);
 
-insert into payment_type (payment_type_description) values ('Débito');
-insert into payment_type (payment_type_description) values ('Crédito');
+insert into payment_type (payment_type_description) values ('Cartão Débito');
+insert into payment_type (payment_type_description) values ('Cartão Crédito');
+insert into payment_type (payment_type_description) values ('Boleto');
+insert into payment_type (payment_type_description) values ('Dinheiro');

@@ -26,7 +26,9 @@
 	<script type="text/javascript" src="js/controller.js"></script>
 	
 </head>
-<body class="bg-light" onload="init(${emprestimo.cliente.numeroDoCliente},${emprestimo.coletor.numeroDoColetor})">
+<body class="bg-light" onload="init(${emprestimo.cliente.numeroDoCliente},${emprestimo.coletor.numeroDoColetor},${pagamentos.tipoPagamento.idTipoPagamento})">
+
+
 
 	<div class="container">
 	
@@ -54,6 +56,7 @@
 			<input  type="hidden" name="codigo" value="${emprestimo.numeroDoContrato}">
 			<input  type="hidden" name="codigoCliente" value="${emprestimo.cliente.numeroDoCliente}">
 			<input  type="hidden" name="codigoColetor" value="${emprestimo.coletor.numeroDoColetor}">
+			<input  type="hidden" name="codigoColetor" value="${pagamentos.tipoPagamento.idTipoPagamento}">
 		
 			<div class="row col-12">
  
@@ -145,39 +148,54 @@
 			<thead class="thead-dark">
 				<tr>
 					<th>Nº pagamento</th>
+					<th>Data Vencimento</th>
 					<th>Data pagamento</th>
 					<th>Valor pagamento</th>
 					<th>Taxa de Juros</th>
 					<th>Observacoes</th>
-<!-- 					<th>Status</th> -->
-					<th>Ação</th>
+ 					<th>Tipo de pagamento</th> 
+ 					<th>Status</th>
+					<th>Ações</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${emprestimo.pagamentos}" var="pagamento">
 					<tr>
 						<td>${pagamento.numeroDoPagamento}</td>
+						<td>${pagamento.dataVencimento}</td>
 						<td>${pagamento.dataDoPagamento}</td>						
 						<td>${pagamento.pagamentoDoMontante}</td>
 						<td>${pagamento.pagamentoTaxaDeJuros}</td>
-						<td>${pagamento.observacoes}</td>
+						<td class="pt-3-half" contenteditable="true">
 						
-<%-- 						<c:set var="status" value="${emprestimo.status}"/>
+						<input class="form-control" type="text" id="observacoes" name="observacoes" value="${pagamento.observacoes}">
+						
+						</td>
+						<td class="pt-3-half" contenteditable="true">
+						
+								<select class="form-control form-control-lg" name="tipoPagamento.idTipoPagamento" id="idTipoPagamento" required>
+								<option selected>Selecione</option>
+									<c:forEach items="${tipoPagamento}" var="tipoPagamento">
+										<option value="${tipoPagamento.idTipoPagamento}">${tipoPagamento.descPagamento}</option>
+									</c:forEach>
+								</select>						
+		
+						</td>
+				
+ 						<c:set var="status" value="${pagamento.status}"/>
 						<c:if test="${status =='Vencido'}">
-							 <td class="table-danger">${emprestimo.status}</td>
+							 <td class="table-danger">${pagamento.status}</td>
 						</c:if>
 						<c:if test="${status =='Regular'}">
-							 <td class="table-primary">${emprestimo.status}</td>
+							 <td class="table-primary">${pagamento.status}</td>
 						</c:if>						
 						<c:if test="${status =='Quitado'}">
-							 <td class="table-success">${emprestimo.status}</td>
-						</c:if>	 --%>						
+							 <td class="table-success">${pagamento.status}</td>
+						</c:if>	 						
 						
 						<td  class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
-							<a title="Editar" href='<c:url value="/formedit/${emprestimo.numeroDoContrato}" />'><span class="glyphicon glyphicon-pencil"></span></a>
-							<a title="Ecluir" href='<c:url value="/delete/${emprestimo.numeroDoContrato}" />'><span class="glyphicon glyphicon-remove"></span></a>
-							<span class="glyphicon glyphicon-list"></span>	
-							<span class="glyphicon glyphicon-plus"></span>						
+							<a title="Pagar parcela" href='<c:url value="/" />'><span class="glyphicon glyphicon-ok"></span></a>
+							<a title="Pagar somente Juros" href='<c:url value="/" />'><span class="glyphicon glyphicon-erase"></span></a>					
 						</td>
 					</tr>
 				</c:forEach>
