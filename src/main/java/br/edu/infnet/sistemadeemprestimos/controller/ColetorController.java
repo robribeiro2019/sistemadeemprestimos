@@ -14,7 +14,7 @@ import br.edu.infnet.sistemadeemprestimos.service.ColetorService;
 
 @Controller
 @RequestMapping(value = "/coletor")
-public class ColectorController {
+public class ColetorController {
 	
 	@Autowired
 	private ColetorService coletorService;

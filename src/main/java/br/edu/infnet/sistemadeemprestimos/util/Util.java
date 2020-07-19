@@ -14,6 +14,11 @@ import br.edu.infnet.sistemadeemprestimos.model.Emprestimo;
  */
 public class Util {
 	
+	/**
+	 * Calcula valor da parcela
+	 * @param emprestimo {@link Emprestimo}
+	 * @return Valor da Parcela
+	 */
 	public static BigDecimal calcularValorParcela(Emprestimo emprestimo) {
 		
 		BigDecimal bgParcela = new BigDecimal(0);
@@ -26,6 +31,12 @@ public class Util {
 		return bgParcela;
 	}
 	
+	/**
+	 * Adiciona Qtd ao mes na data de inicio do emprestimo
+	 * @param data Data de inicio do emprestimo
+	 * @param qtd  Quantidade
+	 * @return Data somada
+	 */
 	public static Date adicionarMes(Date data, int qtd) {
 		
 		LocalDate dateAdd = data.toInstant()
@@ -35,6 +46,12 @@ public class Util {
 		return Date.from(dateAdd.atStartOfDay(ZoneId.systemDefault()).toInstant());
 	}
 	
+	/**
+	 * Calcula Taxa de Juros
+	 * @param bgParcela Parcela
+	 * @param txJuros Taxa de Juros do Coletor
+	 * @return Taxa de Juros calculada
+	 */
 	public static BigDecimal calcularTaxaDeJuros(BigDecimal bgParcela, BigDecimal txJuros) {
 		
 		BigDecimal bgTxJuros = new BigDecimal(0);
