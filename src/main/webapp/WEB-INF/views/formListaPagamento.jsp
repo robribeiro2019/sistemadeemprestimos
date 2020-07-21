@@ -61,6 +61,7 @@
 			<input  type="hidden" name="codigoCliente" value="${emprestimo.cliente.numeroDoCliente}">
 			<input  type="hidden" name="codigoColetor" value="${emprestimo.coletor.numeroDoColetor}">
 			<input  type="hidden" name="codigoColetor" value="${pagamentos.tipoPagamento.idTipoPagamento}">
+			<input  type="hidden" name="idPagamento" value="${pagamento.numeroDoPagamento}">
 		
 			<div class="row col-12">
  
@@ -198,8 +199,8 @@
 						</c:if>	 						
 						
 						<td  class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
-							<a title="Pagar parcela" href='<c:url value="/" />'><span class="glyphicon glyphicon-ok"></span></a>
-							<a title="Pagar somente Juros" href='<c:url value="/" />'><span class="glyphicon glyphicon-erase"></span></a>					
+							<a title="Receber parcela" href='<c:url value="/receberPagamento/${pagamento.numeroDoPagamento}" />'><span class="glyphicon glyphicon-check"></span></a>
+							<a title="Receber somente Juros" href='<c:url value="/" />'><span class="glyphicon glyphicon-ok"></span></a>					
 						</td>
 					</tr>
 				</c:forEach>

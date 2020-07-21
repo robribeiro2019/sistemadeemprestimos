@@ -53,6 +53,14 @@ public class Pagamento implements Serializable {
     public Pagamento() {
 		super();
 	}
+    
+    
+	public Pagamento(Date dataVencimento, String observacoes) {
+		super();
+		this.dataVencimento = dataVencimento;
+		this.observacoes = observacoes;
+	}
+
 
 	public Pagamento(BigDecimal pagamentoDoMontante, Date dataVencimento, BigDecimal pagamentoTaxaDeJuros, String observacoes,
 			Emprestimo emprestimoConcedido) {

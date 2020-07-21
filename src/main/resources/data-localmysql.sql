@@ -1,8 +1,3 @@
-delete from customer;
-delete from collector;
-delete from payment_type;
-
-
 insert into customer (address, customer_name) values ('Rua A, casa 2 - Niterói-RJ', 'José das Coves');
 insert into customer (address, customer_name) values ('Rua B, casa 1 - Rio de Janeiro-RJ', 'Maria da Vida');
 insert into customer (address, customer_name) values ('Rua C, casa 8 - São Gonçalo-RJ', 'Manoel e Joaquim');
