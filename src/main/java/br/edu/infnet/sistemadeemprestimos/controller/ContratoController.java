@@ -1,15 +1,20 @@
 package br.edu.infnet.sistemadeemprestimos.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
 
 import br.edu.infnet.sistemadeemprestimos.model.Cliente;
 import br.edu.infnet.sistemadeemprestimos.model.Coletor;
@@ -43,12 +48,23 @@ public class ContratoController {
 	
 	@RequestMapping(value="/", method = RequestMethod.GET )
 	public String listarContratos(Model model) {
-		List<Emprestimo> emprestimo = emprestimoService.listarTodosEmprestimos();
 		
+		List<Emprestimo> emprestimo = emprestimoService.listarTodosEmprestimos();
 		model.addAttribute("emprestimo", emprestimo);
 		
 		return "/home";
+		
 	}	
+	
+	@RequestMapping(value="/listaContratos", method = RequestMethod.GET )
+	public @ResponseBody String listarContratosJSon(Model model) {
+		
+		List<Emprestimo> lstEmprestimo = emprestimoService.listarTodosEmprestimos();
+		Emprestimo emprestimo = lstEmprestimo.get(0);
+		emprestimo.setPagamentos(null);
+		String json = new Gson().toJson(emprestimo);
+		return json;
+	}
 	
 	@RequestMapping(value="/novo", method = RequestMethod.GET )
 	public String form(Model model) {
@@ -63,32 +79,38 @@ public class ContratoController {
 		return "/formEmprestimo";
 	}
 	
+	@Transactional
 	@RequestMapping(value="/salvar", method = RequestMethod.POST )
 	public String form(Model model, Emprestimo emprestimo) {
+		
+		if(emprestimo.getNumeroDoContrato() != null) {
+			
+			Emprestimo emprestimoVelho = emprestimoService.getEmprestimo(emprestimo.getNumeroDoContrato().toString());
+			emprestimoVelho.setObservacoes(emprestimo.getObservacoes());
+			emprestimoService.salvar(emprestimoVelho);
+			return "redirect:/";
+			
+		}
 		
 		emprestimo.setCliente                   (clienteService.getCliente(emprestimo.getCliente().getNumeroDoCliente()));
 		emprestimo.setColetor                   (coletorService.getColetor(emprestimo.getColetor().getNumeroDoColetor()));
 		emprestimo.setMontanteDoEmprestimoDevido(emprestimo.getMontanteDoEmprestimo().doubleValue());
 		emprestimo.setDataProximoVencimento     (Util.adicionarMes(emprestimo.getDataInicioContrato(), 1));
 		emprestimo.setDataFimContrato           (Util.adicionarMes(emprestimo.getDataInicioContrato(), emprestimo.getQuantidadeDeParcelas()));
-		
+	
 		emprestimoService.salvar(emprestimo);
-			
-		if(emprestimo.getTipoForm().equals("Novo")) {
-			
-			//Calcula o valor das parcelas
-			BigDecimal bgParcela = Util.calcularValorParcela(emprestimo);
-			
-			IntStream.range(0, emprestimo.getQuantidadeDeParcelas()).forEach(n -> {
-				pagamentoService.salvar(
-						new Pagamento(bgParcela, 
-								Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
-								Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-								"", 
-								emprestimo));
-		    });
-		}
 		
+		BigDecimal bgParcela = Util.calcularValorParcela(emprestimo);
+		
+		IntStream.range(0, emprestimo.getQuantidadeDeParcelas()).forEach(n -> {
+			pagamentoService.salvar(
+					new Pagamento(bgParcela, 
+							Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
+							Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
+							"", 
+							emprestimo));
+	    });
+			
 		return "redirect:/";
 	}
 	

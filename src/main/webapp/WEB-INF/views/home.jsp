@@ -48,7 +48,7 @@
 <script type="text/javascript" src="/sisemprestimos/js/jquery-dateformat.min.js"></script>
 <script type="text/javascript" src="/sisemprestimos/js/controller.js"></script>
 </head>
-<body class="bg-light">
+<body class="bg-light" onload="init();">
 
 	<div class="container">
 
@@ -129,6 +129,7 @@
 			</tbody>
 		</table>
 	</div>
+	<script src="./js/home.js"></script>
 	<script>
 		$('input#txt_consulta').quicksearch('table#tabela tbody tr');
 	</script>
