@@ -66,31 +66,38 @@ public class ContratoController {
 	@RequestMapping(value="/salvar", method = RequestMethod.POST )
 	public String form(Model model, Emprestimo emprestimo) {
 		
+		if(emprestimo.getNumeroDoContrato() != null) {
+			
+			Emprestimo emprestimoVelho = emprestimoService.getEmprestimo(emprestimo.getNumeroDoContrato().toString());
+			emprestimoVelho.setObservacoes(emprestimo.getObservacoes());
+			emprestimoService.salvar(emprestimoVelho);
+			return "redirect:/";
+			
+		}
+		
 		emprestimo.setCliente                   (clienteService.getCliente(emprestimo.getCliente().getNumeroDoCliente()));
 		emprestimo.setColetor                   (coletorService.getColetor(emprestimo.getColetor().getNumeroDoColetor()));
 		emprestimo.setMontanteDoEmprestimoDevido(emprestimo.getMontanteDoEmprestimo().doubleValue());
 		emprestimo.setDataProximoVencimento     (Util.adicionarMes(emprestimo.getDataInicioContrato(), 1));
 		emprestimo.setDataFimContrato           (Util.adicionarMes(emprestimo.getDataInicioContrato(), emprestimo.getQuantidadeDeParcelas()));
-		
+	
 		emprestimoService.salvar(emprestimo);
-			
-		if(emprestimo.getTipoForm().equals("Novo")) {
-			
-			//Calcula o valor das parcelas
-			BigDecimal bgParcela = Util.calcularValorParcela(emprestimo);
-			
-			IntStream.range(0, emprestimo.getQuantidadeDeParcelas()).forEach(n -> {
-				pagamentoService.salvar(
-						new Pagamento(bgParcela, 
-								Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
-								Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-								"", 
-								emprestimo));
-		    });
-		}
 		
+		BigDecimal bgParcela = Util.calcularValorParcela(emprestimo);
+		
+		IntStream.range(0, emprestimo.getQuantidadeDeParcelas()).forEach(n -> {
+			pagamentoService.salvar(
+					new Pagamento(bgParcela, 
+							Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
+							Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
+							"", 
+							emprestimo));
+
+	    });
+			
 		return "redirect:/";
 	}
+
 	
 	@RequestMapping(value="/formedit/{numeroDoContrato}", method = RequestMethod.GET )
 	public String formEdit(@PathVariable("numeroDoContrato") String id,  Model model) {
