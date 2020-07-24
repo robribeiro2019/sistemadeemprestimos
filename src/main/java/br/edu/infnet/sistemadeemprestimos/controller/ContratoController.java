@@ -3,11 +3,12 @@ package br.edu.infnet.sistemadeemprestimos.controller;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -212,8 +213,14 @@ public class ContratoController {
 
 		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
 		
+        PersistentBag bg = (PersistentBag) emprestimo.getPagamentos();
+
+        ArrayList<Pagamento> replacementList = new ArrayList<Pagamento>();
+        replacementList.addAll(bg);
+
+		
 		emprestimo.setMontanteDoEmprestimoDevido(0D);
-		for (Pagamento pagamento : emprestimo.getPagamentos()) {
+		for (Pagamento pagamento : replacementList) {
 			
 			pagamento.setDataDoPagamento(new Date());
 			pagamento.setObservacoes("Quitado Automaticamente!");
@@ -224,11 +231,4 @@ public class ContratoController {
 		
 		return "redirect:/";
 	}
-	
-	
-	
-	
-	
-	
-	
 }
