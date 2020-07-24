@@ -98,20 +98,20 @@ public class ContratoController {
 						new Pagamento(bgParcela, 
 								Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
 								Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-								"", emprestimo));				
+								"", emprestimo.getNumeroDoContrato()));				
 			}else {
 					if (n==0){
 							pagamentoService.salvar(
 									new Pagamento(bgParcela.subtract(diferencaValorParcela.multiply(new BigDecimal("-1"))), 
 											Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
 											Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-											"", emprestimo));						
+											"", emprestimo.getNumeroDoContrato()));						
 					}else {
 							pagamentoService.salvar(
 									new Pagamento(bgParcela, 
 											Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
 											Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-											"", emprestimo));						
+											"", emprestimo.getNumeroDoContrato()));						
 					}
 				
 			}
