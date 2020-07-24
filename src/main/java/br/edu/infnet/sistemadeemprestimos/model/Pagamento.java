@@ -55,26 +55,19 @@ public class Pagamento implements Serializable {
 	}
     
     
-	public Pagamento(Date dataVencimento, String observacoes) {
-		super();
-		this.dataVencimento = dataVencimento;
-		this.observacoes = observacoes;
-	}
-
-
 	public Pagamento(BigDecimal pagamentoDoMontante, Date dataVencimento, BigDecimal pagamentoTaxaDeJuros, String observacoes,
-			Emprestimo emprestimoConcedido) {
+			Emprestimo emprestimo) {
 		
 		this.pagamentoDoMontante  = pagamentoDoMontante;
 		this.dataVencimento       = dataVencimento;
 		this.pagamentoTaxaDeJuros = pagamentoTaxaDeJuros;
 		this.observacoes          = observacoes;
-		this.emprestimoConcedido  = emprestimoConcedido;
+		this.emprestimo			  = emprestimo;
 	}
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="ContractID")
-	private Emprestimo emprestimoConcedido;
+	private Emprestimo emprestimo;
     
    
     @OneToOne
@@ -84,6 +77,16 @@ public class Pagamento implements Serializable {
     @Transient
     private String status;
     
+    
+	public Emprestimo getEmprestimo() {
+		return emprestimo;
+	}
+
+
+	public void setEmprestimo(Emprestimo emprestimo) {
+		this.emprestimo = emprestimo;
+	}
+
 
 	public Integer getNumeroDoPagamento() {
 		return numeroDoPagamento;
@@ -125,15 +128,7 @@ public class Pagamento implements Serializable {
 		this.observacoes = observacoes;
 	}
 
-	public Emprestimo getEmprestimoConcedido() {
-		return emprestimoConcedido;
-	}
 
-	public void setEmprestimoConcedido(Emprestimo emprestimoConcedido) {
-		this.emprestimoConcedido = emprestimoConcedido;
-	}
-
-	
 	public TipoPagamento getTipoPagamento() {
 		return tipoPagamento;
 	}
@@ -159,8 +154,10 @@ public class Pagamento implements Serializable {
 			return "Regular";
 		}else if (dataVencimento.compareTo(dateNow) < 0 && dataDoPagamento==null) {
 			return "Vencido";
-		}else if (dataDoPagamento!=null ){
+		}else if (dataDoPagamento!=null && pagamentoTaxaDeJuros.doubleValue() > 0 ){
 			return "Quitado";
+		}else if (dataDoPagamento!=null && pagamentoTaxaDeJuros.doubleValue() == 0 ){
+			return "Parcial";
 		}
 		
 		return "Sem Status";

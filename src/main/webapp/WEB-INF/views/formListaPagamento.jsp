@@ -57,10 +57,9 @@
 	
 		<form action='<c:url value="/salvar" />'  method="post">
 		
-			<input  type="hidden" name="codigo" value="${emprestimo.numeroDoContrato}">
 			<input  type="hidden" name="codigoCliente" value="${emprestimo.cliente.numeroDoCliente}">
-			<input  type="hidden" name="codigoColetor" value="${emprestimo.coletor.numeroDoColetor}">
-			<input  type="hidden" name="codigoColetor" value="${pagamentos.tipoPagamento.idTipoPagamento}">
+			<input  type="hidden" name="coletor.codigoColetor" value="${emprestimo.coletor.numeroDoColetor}">
+			<input  type="hidden" name="idTipoPagamento" value="${pagamentos.tipoPagamento.idTipoPagamento}">
 			<input  type="hidden" name="idPagamento" value="${pagamento.numeroDoPagamento}">
 		
 			<div class="row col-12">
@@ -173,15 +172,21 @@
 						<td>${pagamento.pagamentoTaxaDeJuros}</td>
 						<td class="pt-3-half" contenteditable="true">
 						
-						<input class="form-control" type="text" id="observacoes" name="observacoes" value="${pagamento.observacoes}">
+						<input ${pagamento.status=='Quitado'||pagamento.status=='Parcial'?"disabled":""} class="form-control" type="text" id="observacoes-${pagamento.numeroDoPagamento}" name="observacoes" value="${pagamento.observacoes}">
 						
 						</td>
 						<td class="pt-3-half" contenteditable="true">
 						
-								<select class="form-control form-control-lg" name="tipoPagamento.idTipoPagamento" id="idTipoPagamento" required>
+								<select ${pagamento.status=='Quitado'||pagamento.status=='Parcial'?"disabled":""} class="form-control form-control-lg" name="tipoPagamento.idTipoPagamento" id="idTipoPagamento-${pagamento.numeroDoPagamento }" required>
 								<option selected>Selecione</option>
 									<c:forEach items="${tipoPagamento}" var="tipoPagamento">
-										<option value="${tipoPagamento.idTipoPagamento}">${tipoPagamento.descPagamento}</option>
+									
+										<option ${tipoPagamento.idTipoPagamento == pagamento.tipoPagamento.idTipoPagamento ? 'selected' : ' '}
+										
+										
+										value="${tipoPagamento.idTipoPagamento}">${tipoPagamento.descPagamento}</option>
+										
+										
 									</c:forEach>
 								</select>						
 		
@@ -194,14 +199,20 @@
 						<c:if test="${status =='Regular'}">
 							 <td class="table-primary">${pagamento.status}</td>
 						</c:if>						
-						<c:if test="${status =='Quitado'}">
+						<c:if test="${status=='Quitado'}">
 							 <td class="table-success">${pagamento.status}</td>
-						</c:if>	 						
-						
-						<td  class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
-							<a title="Receber parcela" href='<c:url value="/receberPagamento/${pagamento.numeroDoPagamento}" />'><span class="glyphicon glyphicon-check"></span></a>
-							<a title="Receber somente Juros" href='<c:url value="/" />'><span class="glyphicon glyphicon-ok"></span></a>					
-						</td>
+	 						 <td></td>
+						</c:if>		
+						<c:if test="${status=='Parcial'}">
+							 <td class="table-warning">${pagamento.status}</td>
+	 						 <td></td>
+						</c:if>	
+						<c:if test="${status != 'Quitado' && status != 'Parcial'}">
+							<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1">
+								<a href="#" onClick="recebendoPagamento(${pagamento.numeroDoPagamento});" title="Receber parcela">      <span class="glyphicon glyphicon-check"></span></a>
+								<a href="#" onClick="recebendoJuros    (${pagamento.numeroDoPagamento});" title="Receber somente Juros"><span class="glyphicon glyphicon-ok">   </span></a>					
+							</td>						
+						</c:if>												
 					</tr>
 				</c:forEach>
 			</tbody>

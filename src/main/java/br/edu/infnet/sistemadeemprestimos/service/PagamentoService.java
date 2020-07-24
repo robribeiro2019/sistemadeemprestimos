@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.edu.infnet.sistemadeemprestimos.controller.PagamentoController;
 import br.edu.infnet.sistemadeemprestimos.model.Pagamento;
 import br.edu.infnet.sistemadeemprestimos.repository.PagamentoRepository;
 
@@ -33,12 +32,4 @@ public class PagamentoService {
 		return pagamentoRepositorio.findById((id)).orElse(new Pagamento());
 	}
 
-	public void receber(Integer idPagamento) {
-		Pagamento pagamento = pagamentoService.getPagamento(Integer.valueOf(idPagamento));
-		pagamento.setDataDoPagamento(new Date());
-		pagamento.setObservacoes("Mudei");
-		
-		pagamentoRepositorio.save(pagamento);
-		
-	}
 }

@@ -117,13 +117,18 @@
 
 						<td class="col-xs-2 col-sm-2 col-md-2 col-lg-1"><a
 							title="Editar"
-							href='<c:url value="/formedit/${emprestimo.numeroDoContrato}" />'><span
+							href='<c:url value="/formedit/${emprestimo.numeroDoContrato}" />'><span ${emprestimo.status=='Quitado'?'style="display: none;"':""} 
 								class="glyphicon glyphicon-pencil"></span></a> <a title="Ecluir"
-							href='<c:url value="/delete/${emprestimo.numeroDoContrato}" />'><span
+							href="#"><span  onclick="podeExcluirContrato(${emprestimo.numeroDoContrato})"  ${emprestimo.status=='Quitado'?'style="display: none;"':""} 
 								class="glyphicon glyphicon-remove"></span></a> <a title="Detalhar"
 							href='<c:url value="/formpag/${emprestimo.numeroDoContrato}" />'><span
-								class="glyphicon glyphicon-list"></span></a> <span
-							class="glyphicon glyphicon-check"></span></td>
+								class="glyphicon glyphicon-list"></span></a> 
+								
+							<a title="Quitar tudo" href="#" ><span onclick="querQuitarTotalContrato(${emprestimo.numeroDoContrato})" ${emprestimo.status=='Quitado'?'style="display: none;"':""} 	
+								
+								 
+							class="glyphicon glyphicon-check"></span></a>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>

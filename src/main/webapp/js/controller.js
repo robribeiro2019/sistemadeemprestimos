@@ -31,6 +31,7 @@ $(function() {
  	})
 });
 
+
 function goToHome(){
 	location.href="/sisemprestimos/";
 }
@@ -49,3 +50,71 @@ function formatDate(date){
 	
 	document.write($.format.date(date + ' 00:00:00.000', 'dd/MM/yyyy'));
 }
+
+
+function recebendoPagamento(idPagamento){
+	
+	$.ajax({
+	     url : getContextPath() + "/receberPagamento/" +idPagamento+"/"+ $("#observacoes-"+idPagamento).val()+"/"+$("#idTipoPagamento-"+idPagamento).val(),
+	     cache: false,
+	     type : 'GET'
+	})
+	.done(function(data){
+		alert("Recebimento realizado com sucesso!");
+		location.reload();
+		
+	});
+	
+}
+
+function recebendoJuros(idPagamento){
+	
+	$.ajax({
+	     url : getContextPath() + "/receberJuros/" +idPagamento+"/"+ $("#observacoes-"+idPagamento).val()+"/"+$("#idTipoPagamento-"+idPagamento).val(),
+	     cache: false,
+	     type : 'GET'
+	})
+	.done(function(data){
+		alert("Recebimento da Taxa de Juros realizado com sucesso!");
+		location.reload();
+		
+	});
+	
+}
+
+function podeExcluirContrato(numeroDoContrato){
+	var name=confirm("Tem certeza que quer Excluir o Contrato?")
+	if (name==true)
+	{
+		$.ajax({
+		     url : getContextPath() + "/delete/"+numeroDoContrato,
+		     cache: false,
+		     type : 'GET'
+		})
+		.done(function(data){
+			location.reload();		
+		});
+	}
+	
+}
+
+
+function querQuitarTotalContrato(numeroDoContrato){
+	var name=confirm("Tem certeza que quer Quitar todo o Contrato?")
+	if (name==true)
+	{
+		$.ajax({
+		     url : getContextPath() + "/receberAll/"+numeroDoContrato,
+		     cache: false,
+		     type : 'GET'
+		})
+		.done(function(data){
+			location.reload();		
+		});
+	}
+	
+}
+
+
+
+

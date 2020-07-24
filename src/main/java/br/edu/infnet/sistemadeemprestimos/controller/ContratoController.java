@@ -1,6 +1,10 @@
 package br.edu.infnet.sistemadeemprestimos.controller;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -67,7 +71,7 @@ public class ContratoController {
 	@Transactional
 	@RequestMapping(value="/salvar", method = RequestMethod.POST )
 	public String form(Model model, Emprestimo emprestimo) {
-		
+
 		if(emprestimo.getNumeroDoContrato() != null) {
 			
 			Emprestimo emprestimoVelho = emprestimoService.getEmprestimo(emprestimo.getNumeroDoContrato().toString());
@@ -92,8 +96,8 @@ public class ContratoController {
 					new Pagamento(bgParcela, 
 							Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
 							Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-							"", 
-							emprestimo));
+							"", emprestimo));
+			
 
 	    });
 			
@@ -126,9 +130,105 @@ public class ContratoController {
 		return "/formListaPagamento";
 	}
 	
+	@Transactional
+	@RequestMapping(value="/receberPagamento/{numeroDoPagamento}/{observacaoPg}/{idTipoPagamento}", method = RequestMethod.GET)
+	public String receberPagamento(@PathVariable("numeroDoPagamento") Integer idPagamento, 
+								   @PathVariable("idTipoPagamento") Integer idTipoPagamento,
+								   @PathVariable("observacaoPg") String observacaoPg,  Model model){
+		
+		Pagamento  pagamento        = pagamentoService.getPagamento(idPagamento);
+		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimo().getNumeroDoContrato().toString());
+		TipoPagamento tipoPagamento = tipoPagamentoService.getTipoPagamento(idTipoPagamento);
+		
+		model.addAttribute("pagamento", pagamento);
+		model.addAttribute("emprestimo", emprestimo);
+		model.addAttribute("tipoForm",   "Pagamento");
+		
+		
+		pagamento.setDataDoPagamento(new Date());
+		pagamento.setObservacoes(observacaoPg);
+		pagamento.setTipoPagamento(tipoPagamento);
+		
+		emprestimo.setMontanteDoEmprestimoDevido(emprestimo.getMontanteDoEmprestimoDevido()-pagamento.getPagamentoDoMontante().doubleValue());
+		
+		pagamentoService.salvar(pagamento);
+		emprestimoService.salvar(emprestimo);
+		
+		return "/formListaPagamento";
+	}
+	
+	@Transactional
+	@RequestMapping(value="/receberJuros/{numeroDoPagamento}/{observacaoPg}/{idTipoPagamento}", method = RequestMethod.GET)
+	public String receberJuroso(@PathVariable("numeroDoPagamento") Integer idPagamento, 
+								   @PathVariable("idTipoPagamento") Integer idTipoPagamento,
+								   @PathVariable("observacaoPg") String observacaoPg,  Model model){
+		
+		Pagamento  pagamento        = pagamentoService.getPagamento(idPagamento);
+		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimo().getNumeroDoContrato().toString());
+		TipoPagamento tipoPagamento = tipoPagamentoService.getTipoPagamento(idTipoPagamento);
+		
+		model.addAttribute("pagamento", pagamento);
+		model.addAttribute("emprestimo", emprestimo);
+		model.addAttribute("tipoForm",   "Pagamento");
+		
+		BigDecimal taxaJurosAntiga = pagamento.getPagamentoTaxaDeJuros();
+		
+		pagamento.setDataDoPagamento(new Date());
+		pagamento.setObservacoes(observacaoPg);
+		pagamento.setTipoPagamento(tipoPagamento);
+		pagamento.setPagamentoTaxaDeJuros(new BigDecimal (0));
+			
+		pagamentoService.salvar(pagamento);
+		
+		Date novaDataFimDoContrato = null;
+		try {
+			novaDataFimDoContrato = new SimpleDateFormat("yyyy-MM-dd").parse(emprestimo.getDataFimContrato().toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		emprestimo.setDataFimContrato(Util.adicionarMes(novaDataFimDoContrato, 1));
+		emprestimoService.salvar(emprestimo);
+		
+		pagamentoService.salvar(
+				new Pagamento(pagamento.getPagamentoDoMontante(),
+						      Util.adicionarMes(novaDataFimDoContrato, 1),
+						      taxaJurosAntiga,
+						      "", emprestimo));
+		
+		
+		return "/formListaPagamento";
+	}
+	
+	
 	@RequestMapping( value = "/delete/{numeroDoContrato}", method = RequestMethod.GET )
 	public String delete(@PathVariable("numeroDoContrato") String id) {	
 		emprestimoService.deletar(id);
 		return "redirect:/";
-	}	
+	}
+	
+	@Transactional
+	@RequestMapping( value = "/receberAll/{numeroDoContrato}", method = RequestMethod.GET )
+	public String receberAll(@PathVariable("numeroDoContrato") String id) {	
+
+		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
+		
+		emprestimo.setMontanteDoEmprestimoDevido(0D);
+		for (Pagamento pagamento : emprestimo.getPagamentos()) {
+			
+			pagamento.setDataDoPagamento(new Date());
+			pagamento.setObservacoes("Quitado Automaticamente!");
+			pagamento.setTipoPagamento(tipoPagamentoService.getTipoPagamento(1));
+			pagamentoService.salvar(pagamento);
+		}
+		emprestimoService.salvar(emprestimo);
+		
+		return "redirect:/";
+	}
+	
+	
+	
+	
+	
+	
+	
 }

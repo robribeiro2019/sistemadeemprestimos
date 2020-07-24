@@ -141,7 +141,7 @@
 			  	    </c:if>  
 			  	   <c:if test="${tipo =='Novo'}">
 			  	   <input
-			  	      type="text"
+			  	      type="number"
 			  	      class="form-control"
 			  	      name="montanteDoEmprestimo"
 			  	      id="montanteEmprestimo"
@@ -175,7 +175,7 @@
 				</c:if>	
 				<c:if test="${tipo =='Novo'}">
 				<input
-					type="text"
+					type="number"
 					onkeypress="return event.charCode >= 48 && event.charCode <= 57"
 					class="form-control"
 					name="quantidadeDeParcelas"
