@@ -90,15 +90,33 @@ public class ContratoController {
 	
 		emprestimoService.salvar(emprestimo);
 		
-		BigDecimal bgParcela = Util.calcularValorParcela(emprestimo);
+		BigDecimal bgParcela             = Util.calcularValorParcela(emprestimo);
+		BigDecimal diferencaValorParcela = (emprestimo.getMontanteDoEmprestimo()).subtract(bgParcela.multiply(new BigDecimal(emprestimo.getQuantidadeDeParcelas())));
 		
 		IntStream.range(0, emprestimo.getQuantidadeDeParcelas()).forEach(n -> {
-			pagamentoService.salvar(
-					new Pagamento(bgParcela, 
-							Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
-							Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-							"", emprestimo));
 			
+			if (diferencaValorParcela==new BigDecimal("0")){
+				pagamentoService.salvar(
+						new Pagamento(bgParcela, 
+								Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
+								Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
+								"", emprestimo));				
+			}else {
+					if (n==0){
+							pagamentoService.salvar(
+									new Pagamento(bgParcela.subtract(diferencaValorParcela.multiply(new BigDecimal("-1"))), 
+											Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
+											Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
+											"", emprestimo));						
+					}else {
+							pagamentoService.salvar(
+									new Pagamento(bgParcela, 
+											Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
+											Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
+											"", emprestimo));						
+					}
+				
+			}
 
 	    });
 			
