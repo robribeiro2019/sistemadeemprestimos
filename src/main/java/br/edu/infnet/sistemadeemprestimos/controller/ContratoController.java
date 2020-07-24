@@ -3,12 +3,10 @@ package br.edu.infnet.sistemadeemprestimos.controller;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,7 +95,7 @@ public class ContratoController {
 					new Pagamento(bgParcela, 
 							Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
 							Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-							"", emprestimo));
+							"", emprestimo.getNumeroDoContrato()));
 			
 
 	    });
@@ -138,7 +136,7 @@ public class ContratoController {
 								   @PathVariable("observacaoPg") String observacaoPg,  Model model){
 		
 		Pagamento  pagamento        = pagamentoService.getPagamento(idPagamento);
-		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimo().getNumeroDoContrato().toString());
+		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimoId().toString());
 		TipoPagamento tipoPagamento = tipoPagamentoService.getTipoPagamento(idTipoPagamento);
 		
 		model.addAttribute("pagamento", pagamento);
@@ -165,7 +163,7 @@ public class ContratoController {
 								   @PathVariable("observacaoPg") String observacaoPg,  Model model){
 		
 		Pagamento  pagamento        = pagamentoService.getPagamento(idPagamento);
-		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimo().getNumeroDoContrato().toString());
+		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimoId().toString());
 		TipoPagamento tipoPagamento = tipoPagamentoService.getTipoPagamento(idTipoPagamento);
 		
 		model.addAttribute("pagamento", pagamento);
@@ -194,7 +192,7 @@ public class ContratoController {
 				new Pagamento(pagamento.getPagamentoDoMontante(),
 						      Util.adicionarMes(novaDataFimDoContrato, 1),
 						      taxaJurosAntiga,
-						      "", emprestimo));
+						      "", emprestimo.getNumeroDoContrato()));
 		
 		
 		return "/formListaPagamento";
@@ -213,14 +211,8 @@ public class ContratoController {
 
 		Emprestimo emprestimo = emprestimoService.getEmprestimo(id);
 		
-        PersistentBag bg = (PersistentBag) emprestimo.getPagamentos();
-
-        ArrayList<Pagamento> replacementList = new ArrayList<Pagamento>();
-        replacementList.addAll(bg);
-
-		
 		emprestimo.setMontanteDoEmprestimoDevido(0D);
-		for (Pagamento pagamento : replacementList) {
+		for (Pagamento pagamento : emprestimo.getPagamentos()) {
 			
 			pagamento.setDataDoPagamento(new Date());
 			pagamento.setObservacoes("Quitado Automaticamente!");

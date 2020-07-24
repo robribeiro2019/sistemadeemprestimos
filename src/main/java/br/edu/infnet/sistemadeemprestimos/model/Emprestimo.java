@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,8 +25,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name="LoanContract")
 public class Emprestimo implements Serializable {
 	
@@ -73,8 +77,7 @@ public class Emprestimo implements Serializable {
 	@JoinColumn(name="CollectorID")
 	private Coletor coletor;
     
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="ContractID")
+    @OneToMany(mappedBy = "emprestimoId", fetch = FetchType.EAGER)
 	private List<Pagamento> pagamentos;
     
 	@Column(name="Remarks")

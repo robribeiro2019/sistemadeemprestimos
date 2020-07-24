@@ -21,7 +21,10 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name="Payment")
 public class Pagamento implements Serializable {
 	
@@ -49,27 +52,10 @@ public class Pagamento implements Serializable {
 	
 	@Column(name="Remarks")
 	private String observacoes;
-	
-    public Pagamento() {
-		super();
-	}
     
+    @Column(name="ContractID")
+	private Integer emprestimoId;
     
-	public Pagamento(BigDecimal pagamentoDoMontante, Date dataVencimento, BigDecimal pagamentoTaxaDeJuros, String observacoes,
-			Emprestimo emprestimo) {
-		
-		this.pagamentoDoMontante  = pagamentoDoMontante;
-		this.dataVencimento       = dataVencimento;
-		this.pagamentoTaxaDeJuros = pagamentoTaxaDeJuros;
-		this.observacoes          = observacoes;
-		this.emprestimo			  = emprestimo;
-	}
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="ContractID")
-	private Emprestimo emprestimo;
-    
-   
     @OneToOne
     @JoinColumn(name="payTypeCode")
     private TipoPagamento tipoPagamento;
@@ -77,16 +63,27 @@ public class Pagamento implements Serializable {
     @Transient
     private String status;
     
+    public Pagamento() {
+		super();
+	}
     
-	public Emprestimo getEmprestimo() {
-		return emprestimo;
+	public Pagamento(BigDecimal pagamentoDoMontante, Date dataVencimento, BigDecimal pagamentoTaxaDeJuros, String observacoes,
+			Integer emprestimoId) {
+		
+		this.pagamentoDoMontante  = pagamentoDoMontante;
+		this.dataVencimento       = dataVencimento;
+		this.pagamentoTaxaDeJuros = pagamentoTaxaDeJuros;
+		this.observacoes          = observacoes;
+		this.emprestimoId			  = emprestimoId;
 	}
 
-
-	public void setEmprestimo(Emprestimo emprestimo) {
-		this.emprestimo = emprestimo;
+	public Integer getEmprestimoId() {
+		return emprestimoId;
 	}
 
+	public void setEmprestimoId(Integer emprestimoId) {
+		this.emprestimoId = emprestimoId;
+	}
 
 	public Integer getNumeroDoPagamento() {
 		return numeroDoPagamento;
