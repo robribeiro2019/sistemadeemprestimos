@@ -1,6 +1,5 @@
 package br.edu.infnet.sistemadeemprestimos.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,6 @@ public class PagamentoService {
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepositorio;
-	
-	@Autowired
-	private PagamentoService pagamentoService;
   
 	public List<Pagamento> listarTodosPagamentos(){
 		return pagamentoRepositorio.findAll();
