@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -51,8 +53,9 @@ public class Pagamento implements Serializable {
 	@Column(name="Remarks")
 	private String observacoes;
     
-    @Column(name="ContractID")
-	private Integer emprestimoId;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="ContractID")
+	private Emprestimo emprestimo;
     
     @OneToOne
     @JoinColumn(name="payTypeCode")
@@ -66,21 +69,21 @@ public class Pagamento implements Serializable {
 	}
     
 	public Pagamento(BigDecimal pagamentoDoMontante, Date dataVencimento, BigDecimal pagamentoTaxaDeJuros, String observacoes,
-			Integer emprestimoId) {
+			Emprestimo emprestimo) {
 		
 		this.pagamentoDoMontante  = pagamentoDoMontante;
 		this.dataVencimento       = dataVencimento;
 		this.pagamentoTaxaDeJuros = pagamentoTaxaDeJuros;
 		this.observacoes          = observacoes;
-		this.emprestimoId			  = emprestimoId;
+		this.emprestimo			  = emprestimo;
 	}
 
-	public Integer getEmprestimoId() {
-		return emprestimoId;
+	public Emprestimo getEmprestimo() {
+		return emprestimo;
 	}
 
-	public void setEmprestimoId(Integer emprestimoId) {
-		this.emprestimoId = emprestimoId;
+	public void setEmprestimo(Emprestimo emprestimo) {
+		this.emprestimo = emprestimo;
 	}
 
 	public Integer getNumeroDoPagamento() {

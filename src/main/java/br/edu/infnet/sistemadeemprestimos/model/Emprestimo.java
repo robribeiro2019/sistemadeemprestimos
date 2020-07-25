@@ -2,12 +2,13 @@ package br.edu.infnet.sistemadeemprestimos.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -76,7 +78,8 @@ public class Emprestimo implements Serializable {
 	@JoinColumn(name="CollectorID")
 	private Coletor coletor;
     
-    @OneToMany(mappedBy = "emprestimoId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="ContractID")
 	private List<Pagamento> pagamentos;
     
 	@Column(name="Remarks")
@@ -96,8 +99,13 @@ public class Emprestimo implements Serializable {
 		this.observacoes = observacoes;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Pagamento> getPagamentos() {
-		return pagamentos;
+		PersistentBag   bg              = (PersistentBag) this.pagamentos;
+        List<Pagamento> replacementList = new ArrayList<Pagamento>();
+        replacementList.addAll(bg);
+        
+		return replacementList;
 	}
 
 	public void setPagamentos(List<Pagamento> pagamentos) {

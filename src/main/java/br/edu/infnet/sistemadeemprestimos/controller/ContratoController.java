@@ -68,16 +68,16 @@ public class ContratoController {
 	}
 	
 	@Transactional
-	@RequestMapping(value="/salvar", method = RequestMethod.POST )
+	@RequestMapping(value="/salvar", method = RequestMethod.POST)
 	public String form(Model model, Emprestimo emprestimo) {
 
+		//Alterar
 		if(emprestimo.getNumeroDoContrato() != null) {
+			Emprestimo emprestimoOld = emprestimoService.getEmprestimo(emprestimo.getNumeroDoContrato().toString());
+			emprestimoOld.setObservacoes(emprestimo.getObservacoes());
 			
-			Emprestimo emprestimoVelho = emprestimoService.getEmprestimo(emprestimo.getNumeroDoContrato().toString());
-			emprestimoVelho.setObservacoes(emprestimo.getObservacoes());
-			emprestimoService.salvar(emprestimoVelho);
+			emprestimoService.salvar(emprestimoOld);
 			return "redirect:/";
-			
 		}
 		
 		emprestimo.setCliente                   (clienteService.getCliente(emprestimo.getCliente().getNumeroDoCliente()));
@@ -86,35 +86,27 @@ public class ContratoController {
 		emprestimo.setDataProximoVencimento     (Util.adicionarMes(emprestimo.getDataInicioContrato(), 1));
 		emprestimo.setDataFimContrato           (Util.adicionarMes(emprestimo.getDataInicioContrato(), emprestimo.getQuantidadeDeParcelas()));
 	
+		//Novo
 		emprestimoService.salvar(emprestimo);
 		
-		BigDecimal bgParcela             = Util.calcularValorParcela(emprestimo);
-		BigDecimal diferencaValorParcela = (emprestimo.getMontanteDoEmprestimo()).subtract(bgParcela.multiply(new BigDecimal(emprestimo.getQuantidadeDeParcelas())));
+		BigDecimal bgParcela              = Util.calcularValorParcela(emprestimo);
+		BigDecimal diffValorUltimaParcela = emprestimo.getMontanteDoEmprestimo().subtract(bgParcela.multiply(new BigDecimal(emprestimo.getQuantidadeDeParcelas())));
 		
 		IntStream.range(0, emprestimo.getQuantidadeDeParcelas()).forEach(n -> {
 			
-			if (diferencaValorParcela==new BigDecimal("0")){
-				pagamentoService.salvar(
-						new Pagamento(bgParcela, 
-								Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
-								Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-								"", emprestimo.getNumeroDoContrato()));				
-			}else {
-					if (n==0){
-							pagamentoService.salvar(
-									new Pagamento(bgParcela.subtract(diferencaValorParcela.multiply(new BigDecimal("-1"))), 
-											Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
-											Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-											"", emprestimo.getNumeroDoContrato()));						
-					}else {
-							pagamentoService.salvar(
-									new Pagamento(bgParcela, 
-											Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
-											Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
-											"", emprestimo.getNumeroDoContrato()));						
-					}
-				
+			BigDecimal bgUltParcela = null;
+			boolean    isUltParcela = (n == emprestimo.getQuantidadeDeParcelas().intValue() - 1);
+			
+			//Se for última parcela, soma a diferença de arredondamento
+			if(isUltParcela) {
+				bgUltParcela = bgParcela.subtract(diffValorUltimaParcela.multiply(new BigDecimal("-1")));
 			}
+			
+			pagamentoService.salvar(
+					new Pagamento((isUltParcela ? bgUltParcela : bgParcela), 
+							Util.adicionarMes(emprestimo.getDataInicioContrato(), ++n),
+							Util.calcularTaxaDeJuros(bgParcela, emprestimo.getColetor().getTaxaDeJuros()), 
+							"", emprestimo));
 
 	    });
 			
@@ -154,7 +146,7 @@ public class ContratoController {
 								   @PathVariable("observacaoPg") String observacaoPg,  Model model){
 		
 		Pagamento  pagamento        = pagamentoService.getPagamento(idPagamento);
-		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimoId().toString());
+		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimo().getNumeroDoContrato().toString());
 		TipoPagamento tipoPagamento = tipoPagamentoService.getTipoPagamento(idTipoPagamento);
 		
 		model.addAttribute("pagamento", pagamento);
@@ -177,22 +169,22 @@ public class ContratoController {
 	@Transactional
 	@RequestMapping(value="/receberJuros/{numeroDoPagamento}/{observacaoPg}/{idTipoPagamento}", method = RequestMethod.GET)
 	public String receberJuroso(@PathVariable("numeroDoPagamento") Integer idPagamento, 
-								   @PathVariable("idTipoPagamento") Integer idTipoPagamento,
-								   @PathVariable("observacaoPg") String observacaoPg,  Model model){
+								@PathVariable("idTipoPagamento") Integer idTipoPagamento,
+								@PathVariable("observacaoPg") String observacaoPg,  Model model){
 		
 		Pagamento  pagamento        = pagamentoService.getPagamento(idPagamento);
-		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimoId().toString());
+		Emprestimo emprestimo       = emprestimoService.getEmprestimo(pagamento.getEmprestimo().getNumeroDoContrato().toString());
 		TipoPagamento tipoPagamento = tipoPagamentoService.getTipoPagamento(idTipoPagamento);
 		
-		model.addAttribute("pagamento", pagamento);
+		model.addAttribute("pagamento",  pagamento);
 		model.addAttribute("emprestimo", emprestimo);
 		model.addAttribute("tipoForm",   "Pagamento");
 		
 		BigDecimal taxaJurosAntiga = pagamento.getPagamentoTaxaDeJuros();
 		
-		pagamento.setDataDoPagamento(new Date());
-		pagamento.setObservacoes(observacaoPg);
-		pagamento.setTipoPagamento(tipoPagamento);
+		pagamento.setDataDoPagamento     (new Date());
+		pagamento.setObservacoes         (observacaoPg);
+		pagamento.setTipoPagamento       (tipoPagamento);
 		pagamento.setPagamentoTaxaDeJuros(new BigDecimal (0));
 			
 		pagamentoService.salvar(pagamento);
@@ -210,7 +202,7 @@ public class ContratoController {
 				new Pagamento(pagamento.getPagamentoDoMontante(),
 						      Util.adicionarMes(novaDataFimDoContrato, 1),
 						      taxaJurosAntiga,
-						      "", emprestimo.getNumeroDoContrato()));
+						      "", emprestimo));
 		
 		
 		return "/formListaPagamento";

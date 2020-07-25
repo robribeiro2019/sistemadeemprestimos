@@ -24,7 +24,7 @@ public class Util {
 		BigDecimal bgParcela = new BigDecimal(0);
 		
 		try {
-			bgParcela = emprestimo.getMontanteDoEmprestimo().divide(new BigDecimal(emprestimo.getQuantidadeDeParcelas()), 2);
+			bgParcela = emprestimo.getMontanteDoEmprestimo().divide(new BigDecimal(emprestimo.getQuantidadeDeParcelas()), 2, BigDecimal.ROUND_DOWN);
 		} catch (ArithmeticException e) {
 			bgParcela = new BigDecimal(0);
 		}
